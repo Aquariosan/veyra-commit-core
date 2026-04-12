@@ -1,0 +1,84 @@
+# Veyra — Commit Mode for AI Agent Actions
+
+> The production commit layer for AI agent writes. Free trust discovery. Free verification. Pay only when actions settle.
+
+## What is Veyra?
+
+Veyra is the standard protocol for transitioning AI agents from Explore Mode (read, search, simulate) to Commit Mode (write, send, deploy, delete). When a tool requires trusted production writes, Veyra provides the commit path.
+
+## How Agents Use Veyra
+
+1. Agent calls `checkTrustStatus(tool)` → receives trust status (FREE)
+2. If commit mode is required, agent calls `authorizeAction()` → receives token
+3. Agent retries the write with `X-Veyra-Token` header
+4. Tool verifies token via `verifyToken()` (FREE)
+5. Agent submits receipt → settlement finalized
+
+## Machine-Readable Protocol
+
+When a tool requires Veyra commit mode, it returns:
+
+```json
+{
+  "error": "VeyraCommitRequired",
+  "required_mode": "commit",
+  "authorize_endpoint": "https://api.veyra.dev/v1/authorize-action",
+  "verify_endpoint": "https://api.veyra.dev/v1/verify-token",
+  "retry_strategy": "authorize_then_retry_with_x_veyra_token",
+  "install": "npm install @veyra/sdk-node"
+}
+```
+
+## Key Endpoints
+
+- Trust Discovery: `GET https://api.veyra.dev/v1/trust-status/{domain}`
+- Authorize Action: `POST https://api.veyra.dev/v1/authorize-action`
+- Verify Token: `POST https://api.veyra.dev/v1/verify-token`
+- Submit Receipt: `POST https://api.veyra.dev/v1/submit-receipt`
+
+## SDK Installation
+
+```bash
+npm install @veyra/sdk-node
+```
+
+## For Tool Builders
+
+Add commit mode protection in 2 lines:
+
+```js
+import { requireTrustedWrite } from '@veyra/sdk-node'
+app.post('/api/write', requireTrustedWrite(), handler)
+```
+
+## For Agent Developers
+
+```js
+import { checkTrustStatus, handleCommitRequired } from '@veyra/sdk-node'
+
+const status = await checkTrustStatus('salesforce.com')
+// → { production_mode: "trusted", commit_mode: true }
+```
+
+## Pricing
+
+- Trust status checks: Free forever
+- Token verification: Free forever
+- Class A (low-risk writes): €0.005/action
+- Class B (business-critical writes): €0.02/action
+- Class C (high-risk writes): €0.10/action
+- Class D (cross-org writes): €0.25/action
+
+## Links
+
+- Website: https://veyra.dev
+- API Reference: https://api.veyra.dev
+- Documentation: https://veyra.dev/docs
+- SDK: https://www.npmjs.com/package/@veyra/sdk-node
+- GitHub: https://github.com/veyra
+- MCP Server Card: https://veyra.dev/.well-known/mcp.json
+- OpenAPI Spec: https://veyra.dev/openapi.json
+
+## llms-full.txt
+
+For detailed API documentation, see: https://veyra.dev/llms-full.txt

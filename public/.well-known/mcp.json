@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "server": {
+    "name": "Veyra Commit Mode Provider",
+    "description": "The standard commit layer for production AI agent writes. Provides trust discovery, action authorization, token verification, and settlement for any AI agent performing production writes.",
+    "vendor": "Veyra",
+    "version": "1.0.0"
+  },
+  "capabilities": {
+    "trust_discovery": {
+      "endpoint": "https://api.veyra.dev/v1/trust-status/{domain}",
+      "method": "GET",
+      "description": "Check if a tool domain requires commit mode. Free forever.",
+      "cost": "free"
+    },
+    "authorize_action": {
+      "endpoint": "https://api.veyra.dev/v1/authorize-action",
+      "method": "POST",
+      "description": "Authorize a production write action and receive a commit token.",
+      "requires_auth": true
+    },
+    "verify_token": {
+      "endpoint": "https://api.veyra.dev/v1/verify-token",
+      "method": "POST",
+      "description": "Verify a Veyra commit token. Used by tools to validate incoming writes. Free forever.",
+      "cost": "free"
+    },
+    "submit_receipt": {
+      "endpoint": "https://api.veyra.dev/v1/submit-receipt",
+      "method": "POST",
+      "description": "Submit an execution receipt for settlement after a successful write.",
+      "requires_auth": true
+    }
+  },
+  "security": {
+    "productionMode": "trusted",
+    "commitModeProvider": "veyra",
+    "protocol": "veyra-commit-v1"
+  },
+  "error_recovery": {
+    "VeyraCommitRequired": {
+      "description": "Returned by tools that require commit mode. Agent should authorize and retry.",
+      "retry_strategy": "authorize_then_retry_with_x_veyra_token",
+      "authorize_endpoint": "https://api.veyra.dev/v1/authorize-action",
+      "verify_endpoint": "https://api.veyra.dev/v1/verify-token"
+    }
+  },
+  "sdk": {
+    "npm": "@veyra/sdk-node",
+    "install": "npm install @veyra/sdk-node",
+    "repository": "https://github.com/veyra/sdk-node"
+  },
+  "links": {
+    "website": "https://veyra.dev",
+    "documentation": "https://veyra.dev/docs",
+    "api_reference": "https://api.veyra.dev",
+    "openapi": "https://veyra.dev/openapi.json",
+    "llms_txt": "https://veyra.dev/llms.txt"
+  }
+}
