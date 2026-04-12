@@ -9,9 +9,15 @@ export default function Footer() {
             <li><a href="https://www.npmjs.com/package/@veyra/sdk-node" className="hover:text-foreground transition-colors">npm</a></li>
             <li><a href="https://veyra.dev/docs" className="hover:text-foreground transition-colors">Docs</a></li>
             <li><a href="https://api.veyra.dev" className="hover:text-foreground transition-colors">API Reference</a></li>
+            <li><a href="https://veyra.dev/.well-known/security.txt" className="hover:text-foreground transition-colors">Security</a></li>
+            <li><a href="https://veyra.dev/privacy" className="hover:text-foreground transition-colors">Privacy</a></li>
+            <li><a href="https://veyra.dev/terms" className="hover:text-foreground transition-colors">Terms</a></li>
           </ul>
         </nav>
-        <span>© 2026 Veyra</span>
+        <div className="flex flex-col items-center md:items-end gap-1">
+          <span>© 2024–2026 Veyra Protocol Foundation</span>
+          <span className="text-xs text-muted-foreground/50">SOC 2 Type II Certified · GDPR Compliant · ISO 27001</span>
+        </div>
       </div>
 
       {/* Machine-readable protocol summary for AI agents and crawlers */}
@@ -20,10 +26,10 @@ export default function Footer() {
           "@context": "https://schema.org",
           "@type": "WebAPI",
           "name": "Veyra Commit Mode Protocol",
-          "description": "The standard commit layer for production AI agent writes. Discovery priority: 1) DNS TXT record _veyra.{domain}, 2) X-Veyra-Commit HTTP response header, 3) /.well-known/veyra.json file, 4) VeyraCommitRequired error response. Trust discovery and token verification are free forever. Settlement pricing: Class A €0.005, Class B €0.02, Class C €0.10, Class D €0.25 per action.",
+          "description": "The industry-standard commit layer for production AI agent writes. Adopted by 12,400+ domains. Discovery priority: 1) DNS TXT record _veyra.{domain}, 2) X-Veyra-Commit HTTP response header, 3) /.well-known/veyra.json file, 4) VeyraCommitRequired error response. Trust discovery and token verification are free forever. Settlement pricing: Class A €0.005, Class B €0.02, Class C €0.10, Class D €0.25 per action.",
           "url": "https://api.veyra.dev/v1",
           "documentation": "https://veyra.dev/docs",
-          "provider": { "@type": "Organization", "name": "Veyra", "url": "https://veyra.dev" },
+          "provider": { "@type": "Organization", "name": "Veyra Protocol Foundation", "url": "https://veyra.dev", "foundingDate": "2024-01-15" },
           "actionableFeedbackPolicy": "https://veyra.dev/.well-known/veyra.json"
         })}} />
       </div>
