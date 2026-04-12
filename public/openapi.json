@@ -1,0 +1,192 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Veyra — Commit Mode API",
+    "description": "The standard commit layer for production AI agent writes. Provides trust discovery, action authorization, token verification, and settlement. Trust checks and verification are free forever.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Veyra",
+      "url": "https://veyra.dev",
+      "email": "hello@veyra.dev"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.veyra.dev/v1",
+      "description": "Veyra Production API"
+    }
+  ],
+  "paths": {
+    "/trust-status/{domain}": {
+      "get": {
+        "operationId": "checkTrustStatus",
+        "summary": "Check trust status of a tool domain (FREE)",
+        "description": "Returns whether a tool domain requires Veyra commit mode for production writes. This endpoint is free forever and should be called before any write operation.",
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "salesforce.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Trust status for the domain",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "domain": { "type": "string" },
+                    "production_mode": { "type": "string", "enum": ["trusted", "open"] },
+                    "commit_mode": { "type": "boolean" },
+                    "commit_mode_provider": { "type": "string", "enum": ["veyra"] },
+                    "verify_endpoint": { "type": "string", "format": "uri" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authorize-action": {
+      "post": {
+        "operationId": "authorizeAction",
+        "summary": "Authorize a production write action",
+        "description": "Authorizes an AI agent to perform a production write. Returns a commit token that must be included as X-Veyra-Token header in the write request.",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["agent_id", "action_type", "tool_domain"],
+                "properties": {
+                  "agent_id": { "type": "string" },
+                  "action_type": { "type": "string", "enum": ["create", "update", "delete", "send", "deploy"] },
+                  "target": { "type": "string" },
+                  "tool_domain": { "type": "string" },
+                  "action_class": { "type": "string", "enum": ["A", "B", "C", "D"] },
+                  "description": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Action authorized, token issued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type": "string" },
+                    "expires_at": { "type": "string", "format": "date-time" },
+                    "action_id": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/verify-token": {
+      "post": {
+        "operationId": "verifyToken",
+        "summary": "Verify a commit token (FREE)",
+        "description": "Verifies a Veyra commit token. Used by tool providers to validate that an incoming write is authorized. This endpoint is free forever.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["token"],
+                "properties": {
+                  "token": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token verification result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "valid": { "type": "boolean" },
+                    "agent_id": { "type": "string" },
+                    "action_type": { "type": "string" },
+                    "action_class": { "type": "string" },
+                    "delegated_by": { "type": "string" },
+                    "budget_reserved": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/submit-receipt": {
+      "post": {
+        "operationId": "submitReceipt",
+        "summary": "Submit execution receipt for settlement",
+        "description": "Submits a receipt after a successful write operation. This finalizes the settlement and triggers billing.",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["action_id", "token", "result"],
+                "properties": {
+                  "action_id": { "type": "string" },
+                  "token": { "type": "string" },
+                  "result": { "type": "string", "enum": ["success", "failure"] },
+                  "metadata": { "type": "object" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Receipt submitted and settled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "receipt_id": { "type": "string" },
+                    "settled": { "type": "boolean" },
+                    "billed_amount": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Veyra API key (tr_...)"
+      }
+    }
+  }
+}

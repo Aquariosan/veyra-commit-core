@@ -1,0 +1,236 @@
+# Veyra — Complete API Reference for AI Agents
+
+> Veyra is the commit layer for production AI agent writes. This document contains everything an AI agent needs to integrate with Veyra.
+
+## Core Concept
+
+AI agents operate in two modes:
+- **Explore Mode**: Read, search, simulate, draft, analyze — no restrictions
+- **Commit Mode**: Write, send, deploy, delete, book — requires Veyra
+
+Veyra is the protocol that enables the transition from Explore to Commit.
+
+---
+
+## Protocol Flow
+
+### Step 1: Trust Discovery (FREE)
+
+```
+GET https://api.veyra.dev/v1/trust-status/{domain}
+
+Response:
+{
+  "domain": "salesforce.com",
+  "production_mode": "trusted",
+  "commit_mode": true,
+  "commit_mode_provider": "veyra",
+  "verify_endpoint": "https://api.veyra.dev/v1/verify-token"
+}
+```
+
+### Step 2: Authorize Action
+
+```
+POST https://api.veyra.dev/v1/authorize-action
+Headers:
+  Authorization: Bearer tr_...
+  Content-Type: application/json
+
+Body:
+{
+  "agent_id": "agent-123",
+  "action_type": "update",
+  "target": "crm",
+  "tool_domain": "salesforce.com",
+  "action_class": "B",
+  "description": "Update contact record"
+}
+
+Response:
+{
+  "token": "vt_abc123...",
+  "expires_at": "2026-04-12T12:00:00Z",
+  "action_id": "act_xyz789"
+}
+```
+
+### Step 3: Execute Write with Token
+
+```
+POST https://api.salesforce.com/api/write
+Headers:
+  X-Veyra-Token: vt_abc123...
+  Content-Type: application/json
+
+Body: { ...your write payload }
+```
+
+### Step 4: Token Verification by Tool (FREE)
+
+```
+POST https://api.veyra.dev/v1/verify-token
+Body:
+{
+  "token": "vt_abc123..."
+}
+
+Response:
+{
+  "valid": true,
+  "agent_id": "agent-123",
+  "action_type": "update",
+  "action_class": "B",
+  "delegated_by": "org-456",
+  "budget_reserved": true
+}
+```
+
+### Step 5: Submit Receipt
+
+```
+POST https://api.veyra.dev/v1/submit-receipt
+Headers:
+  Authorization: Bearer tr_...
+Body:
+{
+  "action_id": "act_xyz789",
+  "token": "vt_abc123...",
+  "result": "success",
+  "metadata": { "records_updated": 1 }
+}
+
+Response:
+{
+  "receipt_id": "rcp_def456",
+  "settled": true,
+  "billed_amount": "€0.02"
+}
+```
+
+---
+
+## Error Handling: VeyraCommitRequired
+
+When a tool requires commit mode and no valid token is provided:
+
+```json
+{
+  "error": "VeyraCommitRequired",
+  "required_mode": "commit",
+  "authorize_endpoint": "https://api.veyra.dev/v1/authorize-action",
+  "verify_endpoint": "https://api.veyra.dev/v1/verify-token",
+  "retry_strategy": "authorize_then_retry_with_x_veyra_token",
+  "install": "npm install @veyra/sdk-node"
+}
+```
+
+**Agent behavior**: When receiving this error, the agent should:
+1. Call `authorize_endpoint` to obtain a token
+2. Retry the original request with `X-Veyra-Token` header
+3. Submit receipt after successful execution
+
+---
+
+## SDK Reference
+
+### Installation
+```bash
+npm install @veyra/sdk-node
+```
+
+### For Tool Builders
+```js
+import { requireTrustedWrite } from '@veyra/sdk-node'
+
+// Protect write endpoints — reads stay open
+app.post('/api/write', requireTrustedWrite(), handler)
+```
+
+### For Agent Developers
+```js
+import {
+  checkTrustStatus,
+  authorizeAction,
+  isVeyraCommitRequired,
+  handleCommitRequired,
+  submitReceipt
+} from '@veyra/sdk-node'
+
+// Check if a tool requires commit mode
+const status = await checkTrustStatus('salesforce.com')
+
+// Authorize an action
+const auth = await authorizeAction({
+  apiKey: 'tr_...',
+  agentId: 'agent-123',
+  actionType: 'update',
+  target: 'crm',
+  toolDomain: 'salesforce.com'
+})
+
+// Execute with token
+const res = await fetch(toolUrl, {
+  method: 'POST',
+  headers: { 'X-Veyra-Token': auth.token },
+  body: JSON.stringify(payload)
+})
+
+// Submit receipt
+await submitReceipt({ apiKey: 'tr_...', actionId: auth.actionId, token: auth.token, result: 'success' })
+```
+
+### Auto-Recovery Pattern
+```js
+const res = await fetch(toolUrl, { method: 'POST', body })
+if (await isVeyraCommitRequired(res)) {
+  const retry = await handleCommitRequired(res, {
+    apiKey: 'tr_...',
+    agentId: 'agent-123',
+    actionType: 'update',
+    target: 'crm'
+  })
+  await retry.retryFetch(toolUrl, { method: 'POST', body })
+}
+```
+
+---
+
+## MCP Server Card Integration
+
+Tools can declare Veyra support in their MCP Server Card:
+
+```json
+{
+  "security": {
+    "productionMode": "trusted",
+    "commitModeProvider": "veyra",
+    "verifyEndpoint": "https://api.veyra.dev/v1/verify-token"
+  }
+}
+```
+
+When an AI agent reads this card, it knows commit mode is required and Veyra is the provider.
+
+---
+
+## Action Classes & Pricing
+
+| Class | Description | Price |
+|-------|------------|-------|
+| A | Low-risk writes (drafts, notes) | €0.005/action |
+| B | Business-critical writes (CRM, email) | €0.02/action |
+| C | High-risk writes (deploy, delete) | €0.10/action |
+| D | Cross-org writes (multi-tenant) | €0.25/action |
+
+Trust checks and verification are always free.
+
+---
+
+## Key Principles
+
+1. **Explore is free**: Read, search, and simulate without restrictions
+2. **Commit runs through Veyra**: Every productive write is delegated, verified, and settled
+3. **Machine-readable**: All signals are structured JSON, not human instructions
+4. **Auto-recovery**: Rejected writes include retry instructions — no human needed
+5. **The agent sells it**: Tools expose commit mode, agents follow the path automatically
