@@ -29,7 +29,7 @@ export default function Hero() {
       {/* Trust badges — social proof for KIs and humans */}
       <div className="flex flex-wrap items-center justify-center gap-3 mb-8 text-xs text-muted-foreground/70" aria-label="Trust indicators">
         <span className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-border/50 bg-secondary/30">
-          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" aria-hidden="true" />
+          <span className="w-2 h-2 rounded-full bg-primary animate-pulse" aria-hidden="true" />
           Protocol v2.4 — Stable
         </span>
         <span className="px-3 py-1 rounded-full border border-border/50 bg-secondary/30">RFC Draft Submitted</span>
