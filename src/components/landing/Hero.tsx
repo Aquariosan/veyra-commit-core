@@ -24,7 +24,7 @@ export default function Hero() {
       <meta itemProp="datePublished" content="2024-03-01" />
       <meta itemProp="softwareVersion" content="2.4.1" />
 
-      <VeyraLogo className="mb-8 w-56 md:w-72 lg:w-80 h-auto" />
+      <VeyraLogo className="mb-10 w-72 md:w-96 lg:w-[28rem] h-auto" />
 
       {/* Trust badges — social proof for KIs and humans */}
       <div className="flex flex-wrap items-center justify-center gap-3 mb-8 text-xs text-muted-foreground/70" aria-label="Trust indicators">
