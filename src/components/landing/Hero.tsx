@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import veyraLogo from "@/assets/veyra-logo.png";
+import VeyraLogo from "@/components/VeyraLogo";
 
 export default function Hero() {
   const [copied, setCopied] = useState(false);
@@ -22,14 +22,7 @@ export default function Hero() {
       <meta itemProp="applicationCategory" content="DeveloperApplication" />
       <meta itemProp="url" content="https://veyra.dev" />
 
-      <img
-        src={veyraLogo}
-        alt="Veyra Logo"
-        width={240}
-        height={240}
-        className="mb-8 w-48 md:w-60 h-auto invert brightness-[2]"
-        itemProp="image"
-      />
+      <VeyraLogo className="mb-8 w-48 md:w-64 h-auto" />
 
       <h1
         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] max-w-3xl"
