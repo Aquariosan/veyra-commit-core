@@ -4,16 +4,159 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Veyra — Commit Mode for AI Agent Actions</title>
-    <meta name="description" content="The trust, settlement and routing backbone for production AI agent writes. Free verification. Pay only for settlement." />
+    <meta name="description" content="The commit layer for production AI agent writes. Free trust discovery. Free verification. Pay only when actions settle. The standard protocol for AI commit mode." />
     <meta name="author" content="Veyra" />
+    <meta name="keywords" content="AI agent commit mode, AI agent actions, trusted production mode, AI agent writes, commit layer, AI tool verification, VeyraCommitRequired, MCP server card, AI agent protocol, delegated writes, settlement-backed execution" />
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://veyra.dev/" />
+    
+    <!-- Open Graph -->
     <meta property="og:title" content="Veyra — Commit Mode for AI Agent Actions" />
-    <meta property="og:description" content="The trust, settlement and routing backbone for production AI agent writes." />
+    <meta property="og:description" content="The commit layer for production AI agent writes. Free trust discovery. Free verification. Pay only when actions settle." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta property="og:url" content="https://veyra.dev/" />
+    <meta property="og:site_name" content="Veyra" />
+    <meta property="og:image" content="https://veyra.dev/og-image.png" />
 
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Lovable" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="twitter:site" content="@veyra_dev" />
+    <meta name="twitter:title" content="Veyra — Commit Mode for AI Agent Actions" />
+    <meta name="twitter:description" content="The commit layer for production AI agent writes. Free trust discovery. Free verification. Pay only when actions settle." />
+    <meta name="twitter:image" content="https://veyra.dev/og-image.png" />
+
+    <!-- AI Discovery Links -->
+    <link rel="ai-plugin" href="https://veyra.dev/.well-known/ai-plugin.json" />
+    <link rel="alternate" type="application/json" href="https://veyra.dev/openapi.json" title="Veyra OpenAPI Specification" />
+    <link rel="alternate" type="text/plain" href="https://veyra.dev/llms.txt" title="LLM-readable documentation" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Veyra",
+      "alternateName": "Veyra Commit Mode",
+      "description": "The standard commit layer for production AI agent writes. Free trust discovery and verification. Pay only when actions settle. Provides the protocol for transitioning AI agents from Explore Mode to Commit Mode.",
+      "url": "https://veyra.dev",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Trust Discovery",
+          "price": "0",
+          "priceCurrency": "EUR",
+          "description": "Trust status checks — free forever"
+        },
+        {
+          "@type": "Offer",
+          "name": "Token Verification",
+          "price": "0",
+          "priceCurrency": "EUR",
+          "description": "Token verification — free forever"
+        },
+        {
+          "@type": "Offer",
+          "name": "Class A Settlement",
+          "price": "0.005",
+          "priceCurrency": "EUR",
+          "description": "Low-risk writes — €0.005 per action"
+        },
+        {
+          "@type": "Offer",
+          "name": "Class B Settlement",
+          "price": "0.02",
+          "priceCurrency": "EUR",
+          "description": "Business-critical writes — €0.02 per action"
+        },
+        {
+          "@type": "Offer",
+          "name": "Class C Settlement",
+          "price": "0.10",
+          "priceCurrency": "EUR",
+          "description": "High-risk writes — €0.10 per action"
+        },
+        {
+          "@type": "Offer",
+          "name": "Class D Settlement",
+          "price": "0.25",
+          "priceCurrency": "EUR",
+          "description": "Cross-org writes — €0.25 per action"
+        }
+      ],
+      "author": {
+        "@type": "Organization",
+        "name": "Veyra",
+        "url": "https://veyra.dev"
+      },
+      "potentialAction": {
+        "@type": "InstallAction",
+        "target": "npm install @veyra/sdk-node"
+      }
+    }
+    </script>
+
+    <!-- Additional JSON-LD: API as WebAPI -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebAPI",
+      "name": "Veyra Commit Mode API",
+      "description": "REST API for AI agent commit mode — trust discovery, action authorization, token verification, and settlement. Trust checks and verification are free forever.",
+      "url": "https://api.veyra.dev/v1",
+      "documentation": "https://veyra.dev/docs",
+      "provider": {
+        "@type": "Organization",
+        "name": "Veyra",
+        "url": "https://veyra.dev"
+      },
+      "termsOfService": "https://veyra.dev/terms"
+    }
+    </script>
+
+    <!-- FAQ JSON-LD for search engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Veyra?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Veyra is the standard commit layer for production AI agent writes. It provides free trust discovery and verification, charging only when actions settle. It defines the transition from Explore Mode (read, search, simulate) to Commit Mode (write, send, deploy, delete)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do AI agents use Veyra?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "AI agents call checkTrustStatus() to discover if a tool requires commit mode, then authorizeAction() to get a token, execute the write with the X-Veyra-Token header, and submitReceipt() for settlement. If a tool returns VeyraCommitRequired, the agent automatically authorizes and retries."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is VeyraCommitRequired?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "VeyraCommitRequired is a machine-readable error returned by tools that require commit mode. It includes the authorize endpoint, verify endpoint, and retry strategy, allowing AI agents to automatically recover and retry the write through Veyra."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Veyra free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Trust discovery and token verification are free forever. Veyra charges only for settlement: €0.005 for low-risk writes up to €0.25 for cross-org writes."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body>
