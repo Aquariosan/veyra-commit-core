@@ -3,6 +3,7 @@ import WhyAgentsDefault from "@/components/landing/WhyAgentsDefault";
 import Problem from "@/components/landing/Problem";
 import ExploreVsCommit from "@/components/landing/ExploreVsCommit";
 import HowItWorks from "@/components/landing/HowItWorks";
+import WellKnownStandard from "@/components/landing/WellKnownStandard";
 import ForToolBuilders from "@/components/landing/ForToolBuilders";
 import ForAgentDevs from "@/components/landing/ForAgentDevs";
 import WhatAgentSees from "@/components/landing/WhatAgentSees";
@@ -20,6 +21,7 @@ export default function Index() {
       <WhyAgentsDefault />
       <ExploreVsCommit />
       <HowItWorks />
+      <WellKnownStandard />
       <ForToolBuilders />
       <ForAgentDevs />
       <WhatAgentSees />
