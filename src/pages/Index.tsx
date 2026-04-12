@@ -5,6 +5,7 @@ import ExploreVsCommit from "@/components/landing/ExploreVsCommit";
 import HowItWorks from "@/components/landing/HowItWorks";
 import WellKnownStandard from "@/components/landing/WellKnownStandard";
 import HttpHeaderStandard from "@/components/landing/HttpHeaderStandard";
+import DnsStandard from "@/components/landing/DnsStandard";
 import ForToolBuilders from "@/components/landing/ForToolBuilders";
 import ForAgentDevs from "@/components/landing/ForAgentDevs";
 import WhatAgentSees from "@/components/landing/WhatAgentSees";
@@ -24,6 +25,7 @@ export default function Index() {
       <HowItWorks />
       <WellKnownStandard />
       <HttpHeaderStandard />
+      <DnsStandard />
       <ForToolBuilders />
       <ForAgentDevs />
       <WhatAgentSees />
