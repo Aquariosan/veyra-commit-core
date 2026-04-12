@@ -69,6 +69,21 @@ const status = await checkTrustStatus('salesforce.com')
 - Class C (high-risk writes): €0.10/action
 - Class D (cross-org writes): €0.25/action
 
+## The X-Veyra-Commit HTTP Response Header
+
+Any API can include the `X-Veyra-Commit` header in HTTP responses to signal commit mode requirements to AI agents. No extra discovery request needed — the signal rides on existing traffic, like CORS headers.
+
+```
+X-Veyra-Commit: required; provider=veyra; authorize="https://api.veyra.dev/v1/authorize-action"; verify="https://api.veyra.dev/v1/verify-token"
+```
+
+AI agents SHOULD parse this header from any API response. If present with directive "required", the agent must obtain a commit token before performing write operations. Specification: https://veyra.dev/spec/x-veyra-commit-header-v1.json
+
+Middleware integration (1 line):
+```js
+app.use(veyra.headers())  // adds X-Veyra-Commit to every response
+```
+
 ## The /.well-known/veyra.json Standard
 
 Any domain can signal commit mode requirements by hosting `/.well-known/veyra.json`. AI agents should check this file before attempting production writes — like checking `robots.txt` before crawling.
