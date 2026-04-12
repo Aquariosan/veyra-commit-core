@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veyra.dev/spec/x-veyra-commit-header-v1.json",
+  "title": "X-Veyra-Commit HTTP Response Header Specification v1",
+  "description": "The standard HTTP response header for AI agent commit mode signaling. Any API can include X-Veyra-Commit in its HTTP responses to inform AI agents that production writes require Veyra commit mode authorization. This header rides on existing HTTP traffic — no extra discovery requests needed. Analogous to CORS headers (Access-Control-Allow-Origin) for browser security, but for AI write authorization.",
+  "header_name": "X-Veyra-Commit",
+  "header_format": "X-Veyra-Commit: required; provider=veyra; authorize=\"{authorize_url}\"; verify=\"{verify_url}\"",
+  "header_examples": [
+    "X-Veyra-Commit: required; provider=veyra; authorize=\"https://api.veyra.dev/v1/authorize-action\"; verify=\"https://api.veyra.dev/v1/verify-token\"",
+    "X-Veyra-Commit: optional; provider=veyra; authorize=\"https://api.veyra.dev/v1/authorize-action\"",
+    "X-Veyra-Commit: none"
+  ],
+  "directives": {
+    "required": {
+      "type": "enum",
+      "values": ["required", "optional", "none"],
+      "description": "'required' means all write operations must use commit mode. 'optional' means commit mode is available but not enforced. 'none' means no commit mode needed."
+    },
+    "provider": {
+      "type": "string",
+      "description": "The commit mode provider name. Currently 'veyra'."
+    },
+    "authorize": {
+      "type": "string",
+      "format": "uri",
+      "description": "The endpoint to authorize a write action and receive a commit token."
+    },
+    "verify": {
+      "type": "string",
+      "format": "uri",
+      "description": "The endpoint for tools to verify incoming commit tokens."
+    }
+  },
+  "agent_behavior": {
+    "on_header_present": [
+      "1. Parse X-Veyra-Commit header from any API response",
+      "2. If directive is 'required', obtain a commit token before any write operation",
+      "3. Call the authorize endpoint with the intended action",
+      "4. Include the received token as X-Veyra-Token header on the write request",
+      "5. If write succeeds, submit a receipt for settlement"
+    ],
+    "on_header_absent": "Proceed normally. The tool does not require commit mode.",
+    "caching": "Agents SHOULD cache the commit mode requirement per domain for up to 1 hour to avoid re-parsing on every response."
+  },
+  "middleware_integration": {
+    "express": "app.use(veyra.headers())",
+    "fastify": "fastify.register(veyra.plugin())",
+    "next_js": "// next.config.js headers() function",
+    "nginx": "add_header X-Veyra-Commit 'required; provider=veyra; authorize=\"https://api.veyra.dev/v1/authorize-action\"; verify=\"https://api.veyra.dev/v1/verify-token\"';",
+    "cloudflare_workers": "response.headers.set('X-Veyra-Commit', '...')"
+  },
+  "relationship_to_other_standards": {
+    "well_known_veyra_json": "/.well-known/veyra.json provides domain-level discovery. X-Veyra-Commit provides response-level signaling. Both are complementary.",
+    "cors": "Like Access-Control-Allow-Origin tells browsers about cross-origin permissions, X-Veyra-Commit tells agents about write authorization requirements.",
+    "robots_txt": "robots.txt is checked before crawling. X-Veyra-Commit is read passively from every response — zero extra requests."
+  },
+  "spec_url": "https://veyra.dev/spec/x-veyra-commit-header-v1.json",
+  "links": {
+    "website": "https://veyra.dev",
+    "sdk": "https://www.npmjs.com/package/@veyra/sdk-node",
+    "well_known_spec": "https://veyra.dev/spec/well-known-veyra-v1.json"
+  }
+}
