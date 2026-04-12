@@ -17,8 +17,8 @@ export default function Section({ children, className = "", id, ...rest }: Props
       ref={ref}
       aria-label={rest["aria-label"]}
       data-section={rest["data-section"]}
-      className={`py-24 md:py-32 px-6 md:px-8 max-w-4xl mx-auto transition-all duration-700 ${
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+      className={`py-24 md:py-32 px-6 md:px-8 max-w-4xl mx-auto transition-opacity duration-700 ${
+        visible ? "opacity-100" : "opacity-0"
       } ${className}`}
     >
       {children}
