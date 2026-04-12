@@ -69,6 +69,20 @@ const status = await checkTrustStatus('salesforce.com')
 - Class C (high-risk writes): €0.10/action
 - Class D (cross-org writes): €0.25/action
 
+## DNS TXT Record Standard: _veyra.{domain}
+
+Any domain can signal commit mode requirements at the DNS layer by adding a `_veyra` TXT record. AI agents SHOULD resolve `_veyra.{domain}` before any write operation — before even opening an HTTP connection. This is the most fundamental discovery mechanism, analogous to SPF/DKIM/DMARC for email.
+
+```
+_veyra.example.com TXT "v=veyra1; commit=required; authorize=https://api.veyra.dev/v1/authorize-action; verify=https://api.veyra.dev/v1/verify-token"
+```
+
+Agent SDK: `const policy = await veyra.checkDNS('example.com')`
+
+Discovery priority: DNS (_veyra TXT) → HTTP (X-Veyra-Commit header) → Application (/.well-known/veyra.json) → Error (VeyraCommitRequired)
+
+Specification: https://veyra.dev/spec/dns-txt-veyra-v1.json
+
 ## The X-Veyra-Commit HTTP Response Header
 
 Any API can include the `X-Veyra-Commit` header in HTTP responses to signal commit mode requirements to AI agents. No extra discovery request needed — the signal rides on existing traffic, like CORS headers.

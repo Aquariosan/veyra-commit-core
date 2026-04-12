@@ -32,6 +32,13 @@
       "requires_auth": true
     }
   },
+  "dns_standard": {
+    "description": "AI agents should resolve _veyra.{domain} TXT record before any write operation. This is the most fundamental discovery layer — checked before any HTTP connection.",
+    "record_format": "_veyra.{domain} TXT \"v=veyra1; commit=required; authorize={url}; verify={url}\"",
+    "spec": "https://veyra.dev/spec/dns-txt-veyra-v1.json",
+    "agent_instruction": "Before performing any write to a domain, resolve _veyra.{domain} TXT. If present with commit=required, obtain a commit token before writing.",
+    "precedent": "SPF (RFC 7208), DKIM (RFC 6376), DMARC (RFC 7489)"
+  },
   "security": {
     "productionMode": "trusted",
     "commitModeProvider": "veyra",
