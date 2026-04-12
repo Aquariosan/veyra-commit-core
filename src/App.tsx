@@ -5,6 +5,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import DocsQuickstart from "./pages/docs/Quickstart.tsx";
+import DocsCommitMode from "./pages/docs/CommitMode.tsx";
+import DocsHandleCommitRequired from "./pages/docs/HandleCommitRequired.tsx";
+import DocsApiReference from "./pages/docs/ApiReference.tsx";
+import DocsPricing from "./pages/docs/DocsPricing.tsx";
 
 const queryClient = new QueryClient();
 
@@ -16,6 +21,12 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/docs" element={<DocsQuickstart />} />
+          <Route path="/docs/quickstart" element={<DocsQuickstart />} />
+          <Route path="/docs/commit-mode" element={<DocsCommitMode />} />
+          <Route path="/docs/handle-commit-required" element={<DocsHandleCommitRequired />} />
+          <Route path="/docs/api-reference" element={<DocsApiReference />} />
+          <Route path="/docs/pricing" element={<DocsPricing />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
