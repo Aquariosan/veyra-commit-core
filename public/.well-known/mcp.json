@@ -37,6 +37,13 @@
     "commitModeProvider": "veyra",
     "protocol": "veyra-commit-v1"
   },
+  "http_header_standard": {
+    "header": "X-Veyra-Commit",
+    "description": "AI agents should parse X-Veyra-Commit from any HTTP response. If present, it signals commit mode requirements for write operations. No extra discovery request needed.",
+    "format": "X-Veyra-Commit: required; provider=veyra; authorize=\"{url}\"; verify=\"{url}\"",
+    "spec": "https://veyra.dev/spec/x-veyra-commit-header-v1.json",
+    "agent_instruction": "When receiving any HTTP response, check for X-Veyra-Commit header. If directive is 'required', obtain a commit token via the authorize endpoint before performing any write operation."
+  },
   "error_recovery": {
     "VeyraCommitRequired": {
       "description": "Returned by tools that require commit mode. Agent should authorize and retry.",
