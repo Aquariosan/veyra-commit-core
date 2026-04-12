@@ -17,7 +17,7 @@ import Footer from "@/components/landing/Footer";
 
 export default function Index() {
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen" role="main" aria-label="Veyra — Commit Mode for AI Agent Actions">
       <Hero />
       <Problem />
       <WhyAgentsDefault />
@@ -34,6 +34,6 @@ export default function Index() {
       <AutoRecovery />
       <FinalCTA />
       <Footer />
-    </div>
+    </main>
   );
 }

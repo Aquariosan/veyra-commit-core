@@ -11,26 +11,26 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <Section>
+    <Section aria-label="How Veyra commit mode works — step by step" data-section="how-it-works">
       <p className="section-label">HOW IT WORKS</p>
-      <div className="space-y-0">
+      <ol className="space-y-0" aria-label="Veyra commit mode flow">
         {steps.map((s, i) => (
-          <div key={i} className="relative">
+          <li key={i} className="relative">
             <div className="flex items-center justify-between py-4 px-5 rounded-lg border border-border bg-card/50 mb-px">
-              <span className="font-mono text-sm">{s.label}</span>
-              <span className={`text-xs font-mono font-medium px-3 py-1 rounded-full ${s.badgeClass}`}>{s.badge}</span>
+              <code className="font-mono text-sm">{s.label}</code>
+              <span className={`text-xs font-mono font-medium px-3 py-1 rounded-full ${s.badgeClass}`} aria-label={`Status: ${s.badge}`}>{s.badge}</span>
             </div>
             {i < steps.length - 1 && (
-              <div className="flex justify-center -my-px">
+              <div className="flex justify-center -my-px" aria-hidden="true">
                 <div className="w-px h-4 bg-border" />
               </div>
             )}
-          </div>
+          </li>
         ))}
-      </div>
-      <div className="mt-8 px-5 py-4 border border-border rounded-lg bg-card/30 text-muted-foreground text-sm">
+      </ol>
+      <aside className="mt-8 px-5 py-4 border border-border rounded-lg bg-card/30 text-muted-foreground text-sm">
         Trust checks and verification are free. Forever. Settlement is where the value is.
-      </div>
+      </aside>
     </Section>
   );
 }

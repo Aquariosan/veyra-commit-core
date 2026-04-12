@@ -11,7 +11,6 @@ function highlightLine(line: string): JSX.Element[] {
   let rest = line;
   let key = 0;
 
-  // comments
   const commentIdx = rest.indexOf("//");
   let comment = "";
   if (commentIdx >= 0) {
@@ -19,11 +18,9 @@ function highlightLine(line: string): JSX.Element[] {
     rest = rest.slice(0, commentIdx);
   }
 
-  // tokenize simply
   const tokens = rest.split(/(\s+|[{}()\[\],;.=:'"@/])/);
   for (const t of tokens) {
     if (!t) continue;
-    // strings
     if (/^['"].*['"]$/.test(t)) {
       parts.push(<span key={key++} className="text-emerald-400">{t}</span>);
     } else if (keywords.includes(t)) {
@@ -81,13 +78,13 @@ export default function CodeBlock({ code, label }: Props) {
   const isJSON = trimmed.startsWith("{") || trimmed.startsWith("[");
 
   return (
-    <div className="my-6">
+    <figure className="my-6" role="figure" aria-label={label || "Code example"}>
       {label && (
-        <div className="text-xs font-mono text-muted-foreground mb-2">{label}</div>
+        <figcaption className="text-xs font-mono text-muted-foreground mb-2">{label}</figcaption>
       )}
-      <div className="code-block text-[13px] leading-6">
-        {isJSON ? highlightJSON(trimmed) : highlightJS(trimmed)}
-      </div>
-    </div>
+      <pre className="code-block text-[13px] leading-6" aria-label={label || "Code block"}>
+        <code>{isJSON ? highlightJSON(trimmed) : highlightJS(trimmed)}</code>
+      </pre>
+    </figure>
   );
 }
