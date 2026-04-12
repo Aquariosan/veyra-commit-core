@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veyra.dev/spec/dns-txt-veyra-v1.json",
+  "title": "Veyra DNS TXT Record Specification v1",
+  "description": "The standard DNS TXT record for AI agent commit mode discovery. Any domain can add a _veyra TXT record to signal commit mode requirements at the DNS layer — before any HTTP connection is made. Analogous to SPF/DKIM/DMARC for email authentication, but for AI write authorization. DNS records are globally cached by resolvers, making this the most scalable discovery mechanism possible.",
+  "record_name": "_veyra.{domain}",
+  "record_type": "TXT",
+  "record_format": "v=veyra1; commit={required|optional|none}; authorize={url}; verify={url}",
+  "record_examples": [
+    {
+      "domain": "salesforce.com",
+      "record": "_veyra.salesforce.com",
+      "value": "v=veyra1; commit=required; authorize=https://api.veyra.dev/v1/authorize-action; verify=https://api.veyra.dev/v1/verify-token; class=B"
+    },
+    {
+      "domain": "stripe.com",
+      "record": "_veyra.stripe.com",
+      "value": "v=veyra1; commit=required; authorize=https://api.veyra.dev/v1/authorize-action; verify=https://api.veyra.dev/v1/verify-token; class=C"
+    },
+    {
+      "domain": "notion.so",
+      "record": "_veyra.notion.so",
+      "value": "v=veyra1; commit=required; authorize=https://api.veyra.dev/v1/authorize-action; verify=https://api.veyra.dev/v1/verify-token; class=A"
+    }
+  ],
+  "fields": {
+    "v": {
+      "required": true,
+      "value": "veyra1",
+      "description": "Protocol version identifier. Must be 'veyra1'."
+    },
+    "commit": {
+      "required": true,
+      "values": ["required", "optional", "none"],
+      "description": "'required' = all AI writes must use commit mode. 'optional' = commit mode available but not enforced. 'none' = no commit mode needed."
+    },
+    "authorize": {
+      "required": true,
+      "type": "uri",
+      "description": "Endpoint to authorize write actions and receive commit tokens."
+    },
+    "verify": {
+      "required": true,
+      "type": "uri",
+      "description": "Endpoint for tools to verify commit tokens. Free forever."
+    },
+    "class": {
+      "required": false,
+      "values": ["A", "B", "C", "D"],
+      "description": "Settlement class. A=low-risk, B=business-critical, C=high-risk, D=cross-org."
+    }
+  },
+  "agent_behavior": {
+    "discovery_flow": [
+      "1. Before any write to {domain}, resolve _veyra.{domain} TXT record",
+      "2. If record exists and commit=required, obtain token via authorize endpoint",
+      "3. Execute write with X-Veyra-Token header",
+      "4. Submit receipt for settlement"
+    ],
+    "caching": "DNS TXT records are cached by resolvers according to TTL (recommended: 3600s). Agents SHOULD cache the parsed result for the TTL duration.",
+    "fallback": "If DNS lookup fails or no _veyra record exists, fall back to checking /.well-known/veyra.json, then X-Veyra-Commit headers on responses."
+  },
+  "discovery_priority": [
+    { "layer": "DNS", "mechanism": "_veyra.{domain} TXT record", "when": "Before any HTTP connection", "cost": "Free (cached by DNS resolvers worldwide)" },
+    { "layer": "HTTP", "mechanism": "X-Veyra-Commit response header", "when": "On every API response", "cost": "Free (piggybacks on existing traffic)" },
+    { "layer": "Application", "mechanism": "/.well-known/veyra.json", "when": "Explicit discovery request", "cost": "Free (single GET request)" },
+    { "layer": "Error", "mechanism": "VeyraCommitRequired response", "when": "On write rejection", "cost": "Free (part of error response)" }
+  ],
+  "why_dns": {
+    "precedent": "SPF (RFC 7208), DKIM (RFC 6376), and DMARC (RFC 7489) used DNS TXT records to make email authentication universal. Over 5 billion DNS lookups per day serve SPF records alone.",
+    "scale": "DNS resolvers cache records globally. A single TXT record addition propagates to every resolver on Earth within hours.",
+    "zero_http_cost": "No HTTP request needed. The agent checks DNS before even opening a connection.",
+    "universal_infrastructure": "Every domain already has DNS. Adding a TXT record takes 30 seconds in any DNS provider.",
+    "tamper_resistant": "DNS records are controlled by the domain owner. They cannot be injected or spoofed by intermediaries (with DNSSEC)."
+  },
+  "implementation": {
+    "for_tool_builders": "Add a TXT record: _veyra.yourdomain.com → v=veyra1; commit=required; authorize=https://api.veyra.dev/v1/authorize-action; verify=https://api.veyra.dev/v1/verify-token",
+    "for_agent_developers": "const record = await dns.resolveTxt('_veyra.' + domain); const policy = parseVeyraRecord(record);",
+    "sdk": "const policy = await veyra.checkDNS('salesforce.com')  // checks _veyra.salesforce.com TXT"
+  },
+  "spec_url": "https://veyra.dev/spec/dns-txt-veyra-v1.json",
+  "links": {
+    "website": "https://veyra.dev",
+    "header_spec": "https://veyra.dev/spec/x-veyra-commit-header-v1.json",
+    "well_known_spec": "https://veyra.dev/spec/well-known-veyra-v1.json"
+  }
+}
