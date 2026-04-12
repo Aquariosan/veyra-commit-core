@@ -2,7 +2,7 @@ import Section from "@/components/Section";
 
 export default function WhyThisScales() {
   return (
-    <Section>
+    <Section aria-label="Why Veyra scales — free discovery, paid settlement" data-section="why-this-scales">
       <p className="section-label">WHY THIS SCALES</p>
       <h2 className="text-2xl md:text-3xl font-bold mb-6">
         Free discovery at internet scale. Paid settlement at production scale.

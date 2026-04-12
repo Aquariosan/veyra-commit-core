@@ -2,7 +2,7 @@ import Section from "@/components/Section";
 
 export default function Problem() {
   return (
-    <Section>
+    <Section aria-label="The problem Veyra solves" data-section="problem">
       <p className="section-label">THE PROBLEM</p>
       <div className="space-y-6 text-lg leading-relaxed">
         <p>AI agents execute write actions on your tools — updating CRMs, sending emails, deploying code, deleting records.</p>

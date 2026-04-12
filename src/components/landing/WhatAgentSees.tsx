@@ -8,21 +8,23 @@ const signals = [
 
 export default function WhatAgentSees() {
   return (
-    <Section>
+    <Section aria-label="Machine-readable protocol signals that AI agents parse" data-section="what-agent-sees">
       <p className="section-label">WHAT THE AGENT SEES</p>
       <h2 className="text-2xl md:text-3xl font-bold mb-8">
         Machine-readable signals, not human instructions
       </h2>
-      <div className="space-y-4">
+      <dl className="space-y-4">
         {signals.map((s) => (
           <div key={s.label}>
-            <p className="text-xs font-mono text-muted-foreground mb-2">{s.label}</p>
-            <div className="code-block text-[13px] leading-6">
-              <span className="text-emerald-400">{s.code}</span>
-            </div>
+            <dt className="text-xs font-mono text-muted-foreground mb-2">{s.label}</dt>
+            <dd>
+              <pre className="code-block text-[13px] leading-6" aria-label={`${s.label} response`}>
+                <code className="text-emerald-400">{s.code}</code>
+              </pre>
+            </dd>
           </div>
         ))}
-      </div>
+      </dl>
       <p className="mt-8 text-foreground font-medium text-center">
         Agents don't adopt Veyra because of branding. They adopt it because the protocol tells them what to do next.
       </p>
