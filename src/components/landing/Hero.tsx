@@ -27,7 +27,7 @@ export default function Hero() {
         alt="Veyra Logo"
         width={240}
         height={240}
-        className="mb-8 w-48 md:w-60 h-auto"
+        className="mb-8 w-48 md:w-60 h-auto dark:brightness-[2] dark:contrast-[1.1]"
         itemProp="image"
       />
 
