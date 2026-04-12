@@ -1,15 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 
-export function useScrollReveal(threshold = 0.1) {
+export function useScrollReveal(threshold = 0.05) {
   const ref = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el) {
+      setVisible(true);
+      return;
+    }
 
-    // Fallback: make visible after 500ms if observer doesn't trigger
-    const fallback = setTimeout(() => setVisible(true), 800);
+    // Use requestIdleCallback or timeout as fallback
+    const fallback = setTimeout(() => setVisible(true), 300);
+
+    if (!("IntersectionObserver" in window)) {
+      setVisible(true);
+      return;
+    }
 
     const obs = new IntersectionObserver(
       ([entry]) => {
@@ -19,7 +27,7 @@ export function useScrollReveal(threshold = 0.1) {
           obs.disconnect();
         }
       },
-      { threshold, rootMargin: "0px 0px 50px 0px" }
+      { threshold, rootMargin: "200px 0px 200px 0px" }
     );
     obs.observe(el);
     return () => {
