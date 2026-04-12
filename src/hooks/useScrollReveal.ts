@@ -1,40 +1,34 @@
 import { useEffect, useRef, useState } from "react";
 
-export function useScrollReveal(threshold = 0.05) {
+export function useScrollReveal() {
   const ref = useRef<HTMLElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true); // Start visible — no layout issues
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) {
-      setVisible(true);
-      return;
+    if (!el) return;
+
+    // If element is already in viewport, keep visible
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight) {
+      return; // Already visible
     }
 
-    // Use requestIdleCallback or timeout as fallback
-    const fallback = setTimeout(() => setVisible(true), 300);
-
-    if (!("IntersectionObserver" in window)) {
-      setVisible(true);
-      return;
-    }
+    // Only hide elements below the fold, then reveal on scroll
+    setVisible(false);
 
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setVisible(true);
-          clearTimeout(fallback);
           obs.disconnect();
         }
       },
-      { threshold, rootMargin: "200px 0px 200px 0px" }
+      { threshold: 0.05, rootMargin: "100px 0px 100px 0px" }
     );
     obs.observe(el);
-    return () => {
-      obs.disconnect();
-      clearTimeout(fallback);
-    };
-  }, [threshold]);
+    return () => obs.disconnect();
+  }, []);
 
   return { ref, visible };
 }
