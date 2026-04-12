@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veyra.dev/spec/well-known-veyra-v1.json",
+  "title": "/.well-known/veyra.json Specification v1",
+  "description": "The standard discovery file for AI agent commit mode. Any domain hosting /.well-known/veyra.json signals to AI agents that production writes require Veyra commit mode authorization. Analogous to robots.txt for crawlers or security.txt for vulnerability disclosure — but for AI write authorization.",
+  "type": "object",
+  "required": ["schema_version", "protocol", "commit_mode"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Schema version. Currently '1.0'."
+    },
+    "protocol": {
+      "type": "string",
+      "const": "veyra-commit-v1",
+      "description": "Protocol identifier."
+    },
+    "provider": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL of the commit mode provider (Veyra)."
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the commit mode policy for this domain."
+    },
+    "commit_mode": {
+      "type": "object",
+      "required": ["required", "provider", "authorize_endpoint", "verify_endpoint"],
+      "properties": {
+        "required": {
+          "type": "boolean",
+          "description": "Whether production writes to this domain require commit mode."
+        },
+        "provider": {
+          "type": "string",
+          "description": "Name of the commit mode provider."
+        },
+        "authorize_endpoint": {
+          "type": "string",
+          "format": "uri",
+          "description": "Endpoint to authorize a write action and receive a commit token."
+        },
+        "verify_endpoint": {
+          "type": "string",
+          "format": "uri",
+          "description": "Endpoint for this tool to verify incoming commit tokens. Free forever."
+        },
+        "trust_discovery": {
+          "type": "string",
+          "description": "Endpoint template for checking trust status. {domain} is replaced with the target domain."
+        },
+        "settlement_endpoint": {
+          "type": "string",
+          "format": "uri",
+          "description": "Endpoint to submit execution receipts for settlement."
+        }
+      }
+    },
+    "on_write_rejected": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "const": "VeyraCommitRequired",
+          "description": "The machine-readable error code returned when a write is rejected."
+        },
+        "retry_strategy": {
+          "type": "string",
+          "description": "The retry strategy for the agent to follow."
+        },
+        "install": {
+          "type": "string",
+          "description": "SDK install command for developers."
+        }
+      }
+    },
+    "sdk": {
+      "type": "object",
+      "properties": {
+        "npm": { "type": "string" },
+        "repository": { "type": "string", "format": "uri" }
+      }
+    },
+    "spec": {
+      "type": "string",
+      "format": "uri",
+      "description": "Link to this JSON Schema specification."
+    },
+    "links": {
+      "type": "object",
+      "properties": {
+        "website": { "type": "string", "format": "uri" },
+        "documentation": { "type": "string", "format": "uri" },
+        "openapi": { "type": "string", "format": "uri" },
+        "llms_txt": { "type": "string", "format": "uri" }
+      }
+    }
+  }
+}

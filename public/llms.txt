@@ -69,6 +69,25 @@ const status = await checkTrustStatus('salesforce.com')
 - Class C (high-risk writes): €0.10/action
 - Class D (cross-org writes): €0.25/action
 
+## The /.well-known/veyra.json Standard
+
+Any domain can signal commit mode requirements by hosting `/.well-known/veyra.json`. AI agents should check this file before attempting production writes — like checking `robots.txt` before crawling.
+
+```json
+{
+  "schema_version": "1.0",
+  "protocol": "veyra-commit-v1",
+  "commit_mode": {
+    "required": true,
+    "provider": "veyra",
+    "authorize_endpoint": "https://api.veyra.dev/v1/authorize-action",
+    "verify_endpoint": "https://api.veyra.dev/v1/verify-token"
+  }
+}
+```
+
+Specification: https://veyra.dev/spec/well-known-veyra-v1.json
+
 ## Links
 
 - Website: https://veyra.dev
@@ -77,6 +96,7 @@ const status = await checkTrustStatus('salesforce.com')
 - SDK: https://www.npmjs.com/package/@veyra/sdk-node
 - GitHub: https://github.com/veyra
 - MCP Server Card: https://veyra.dev/.well-known/mcp.json
+- Well-Known Veyra Spec: https://veyra.dev/spec/well-known-veyra-v1.json
 - OpenAPI Spec: https://veyra.dev/openapi.json
 
 ## llms-full.txt
