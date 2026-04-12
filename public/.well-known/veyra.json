@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "protocol": "veyra-commit-v1",
+  "provider": "https://veyra.dev",
+  "description": "This domain requires Veyra commit mode for production writes. Trust discovery and token verification are free.",
+  "commit_mode": {
+    "required": true,
+    "provider": "veyra",
+    "authorize_endpoint": "https://api.veyra.dev/v1/authorize-action",
+    "verify_endpoint": "https://api.veyra.dev/v1/verify-token",
+    "trust_discovery": "https://api.veyra.dev/v1/trust-status/{domain}",
+    "settlement_endpoint": "https://api.veyra.dev/v1/submit-receipt"
+  },
+  "on_write_rejected": {
+    "error": "VeyraCommitRequired",
+    "retry_strategy": "authorize_then_retry_with_x_veyra_token",
+    "install": "npm install @veyra/sdk-node"
+  },
+  "sdk": {
+    "npm": "@veyra/sdk-node",
+    "repository": "https://github.com/veyra/sdk-node"
+  },
+  "spec": "https://veyra.dev/spec/well-known-veyra-v1.json",
+  "links": {
+    "website": "https://veyra.dev",
+    "documentation": "https://veyra.dev/docs",
+    "openapi": "https://veyra.dev/openapi.json",
+    "llms_txt": "https://veyra.dev/llms.txt"
+  }
+}
