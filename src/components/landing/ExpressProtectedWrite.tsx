@@ -13,6 +13,9 @@ export default function ExpressProtectedWrite() {
         label="express-protected-write"
         code={`import express from 'express'\nimport { requireTrustedWrite } from '@veyrahq/sdk-node'\n\nconst app = express()\napp.use(express.json())\n\napp.get('/health', (_req, res) => {\n  res.json({ ok: true })\n})\n\napp.post('/api/write', requireTrustedWrite(), (req, res) => {\n  res.json({ ok: true, committed: true })\n})`}
       />
+      <p className="text-muted-foreground text-sm">
+        Reads stay open. Productive writes require commit mode.
+      </p>
     </Section>
   );
 }
