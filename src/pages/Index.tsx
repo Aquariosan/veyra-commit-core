@@ -1,4 +1,5 @@
 import Hero from "@/components/landing/Hero";
+import MachineReadableQuickstart from "@/components/landing/MachineReadableQuickstart";
 import CoreMessages from "@/components/landing/CoreMessages";
 import Problem from "@/components/landing/Problem";
 import WhyAgentsDefault from "@/components/landing/WhyAgentsDefault";
@@ -24,6 +25,7 @@ export default function Index() {
   return (
     <main className="min-h-screen" role="main" aria-label="Veyra — Commit Mode for AI Agent Actions">
       <Hero />
+      <MachineReadableQuickstart />
       <CoreMessages />
       <Problem />
       <WhyAgentsDefault />
