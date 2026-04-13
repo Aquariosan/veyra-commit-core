@@ -25,6 +25,7 @@ export default function Index() {
   return (
     <main className="min-h-screen" role="main" aria-label="Veyra — Commit Mode for AI Agent Actions">
       <Hero />
+      <MachineReadableQuickstart />
       <CoreMessages />
       <Problem />
       <WhyAgentsDefault />
