@@ -30,6 +30,7 @@ export default function Index() {
       <LiveDemo />
       <ForToolBuilders />
       <ForAgentDevs />
+      <OneCallCommit />
       <WhatAgentSees />
       <AutoRecovery />
       <WellKnownStandard />
