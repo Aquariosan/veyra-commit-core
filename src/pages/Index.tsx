@@ -1,4 +1,5 @@
 import Hero from "@/components/landing/Hero";
+import MachineReadableQuickstart from "@/components/landing/MachineReadableQuickstart";
 import CoreMessages from "@/components/landing/CoreMessages";
 import Problem from "@/components/landing/Problem";
 import WhyAgentsDefault from "@/components/landing/WhyAgentsDefault";
