@@ -10,6 +10,7 @@ import HttpHeaderStandard from "@/components/landing/HttpHeaderStandard";
 import DnsStandard from "@/components/landing/DnsStandard";
 import ForToolBuilders from "@/components/landing/ForToolBuilders";
 import ForAgentDevs from "@/components/landing/ForAgentDevs";
+import OneCallCommit from "@/components/landing/OneCallCommit";
 import WhatAgentSees from "@/components/landing/WhatAgentSees";
 import AutoRecovery from "@/components/landing/AutoRecovery";
 import Pricing from "@/components/landing/Pricing";
