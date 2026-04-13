@@ -8,7 +8,7 @@ export default function ForToolBuilders() {
       <h2 className="text-2xl md:text-3xl font-bold mb-2">Enable Trusted Production Mode in 2 lines</h2>
       <CodeBlock
         label="Express middleware"
-        code={`import { requireTrustedWrite } from '@veyra/sdk-node'\napp.post('/api/write', requireTrustedWrite(), handler)`}
+        code={`import { requireTrustedWrite } from '@veyrahq/sdk-node'\napp.post('/api/write', requireTrustedWrite(), handler)`}
       />
       <p className="text-muted-foreground mb-4">
         That's it. Reads stay open. Writes require commit mode. Verification is free. You pay nothing.

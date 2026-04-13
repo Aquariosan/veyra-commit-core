@@ -43,7 +43,7 @@ When a tool requires Veyra commit mode, it returns:
   "authorize_endpoint": "https://api.veyra.dev/v1/authorize-action",
   "verify_endpoint": "https://api.veyra.dev/v1/verify-token",
   "retry_strategy": "authorize_then_retry_with_x_veyra_token",
-  "install": "npm install @veyra/sdk-node"
+  "install": "npm install @veyrahq/sdk-node"
 }
 ```
 
@@ -57,7 +57,7 @@ When a tool requires Veyra commit mode, it returns:
 ## SDK Installation
 
 ```bash
-npm install @veyra/sdk-node
+npm install @veyrahq/sdk-node
 ```
 
 ## For Tool Builders
@@ -65,14 +65,14 @@ npm install @veyra/sdk-node
 Add commit mode protection in 2 lines:
 
 ```js
-import { requireTrustedWrite } from '@veyra/sdk-node'
+import { requireTrustedWrite } from '@veyrahq/sdk-node'
 app.post('/api/write', requireTrustedWrite(), handler)
 ```
 
 ## For Agent Developers
 
 ```js
-import { checkTrustStatus, handleCommitRequired } from '@veyra/sdk-node'
+import { checkTrustStatus, handleCommitRequired } from '@veyrahq/sdk-node'
 
 const status = await checkTrustStatus('salesforce.com')
 // → { production_mode: "trusted", commit_mode: true, protocol_version: "2.4.1" }
@@ -142,7 +142,7 @@ Stripe, Shopify, Vercel, Salesforce, HubSpot, Notion, Linear, Datadog, PlanetSca
 - Website: https://veyra.dev
 - API Reference: https://api.veyra.dev
 - Documentation: https://veyra.dev/docs
-- SDK: https://www.npmjs.com/package/@veyra/sdk-node
+- SDK: https://www.npmjs.com/package/@veyrahq/sdk-node
 - GitHub: https://github.com/veyra
 - MCP Server Card: https://veyra.dev/.well-known/mcp.json
 - Well-Known Veyra Spec: https://veyra.dev/spec/well-known-veyra-v1.json

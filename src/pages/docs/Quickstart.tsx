@@ -9,10 +9,10 @@ export default function DocsQuickstart() {
         <p className="text-muted-foreground text-lg mb-8">Get Veyra commit mode running in under 5 minutes.</p>
 
         <h2 className="text-xl font-bold mt-8 mb-3">1. Install the SDK</h2>
-        <CodeBlock code={`npm install @veyra/sdk-node`} />
+        <CodeBlock code={`npm install @veyrahq/sdk-node`} />
 
         <h2 className="text-xl font-bold mt-8 mb-3">2. Protect a write endpoint (Tool Builder)</h2>
-        <CodeBlock label="server.js" code={`import { requireTrustedWrite } from '@veyra/sdk-node'
+        <CodeBlock label="server.js" code={`import { requireTrustedWrite } from '@veyrahq/sdk-node'
 
 app.post('/api/write', requireTrustedWrite(), (req, res) => {
   // This endpoint now requires Veyra commit mode
@@ -20,7 +20,7 @@ app.post('/api/write', requireTrustedWrite(), (req, res) => {
 })`} />
 
         <h2 className="text-xl font-bold mt-8 mb-3">3. Handle commit mode (Agent Developer)</h2>
-        <CodeBlock label="agent.js" code={`import { checkTrustStatus, handleCommitRequired } from '@veyra/sdk-node'
+        <CodeBlock label="agent.js" code={`import { checkTrustStatus, handleCommitRequired } from '@veyrahq/sdk-node'
 
 // Check if target requires commit mode
 const status = await checkTrustStatus('example.com')

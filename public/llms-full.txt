@@ -121,7 +121,7 @@ When a tool requires commit mode and no valid token is provided:
   "authorize_endpoint": "https://api.veyra.dev/v1/authorize-action",
   "verify_endpoint": "https://api.veyra.dev/v1/verify-token",
   "retry_strategy": "authorize_then_retry_with_x_veyra_token",
-  "install": "npm install @veyra/sdk-node"
+  "install": "npm install @veyrahq/sdk-node"
 }
 ```
 
@@ -136,12 +136,12 @@ When a tool requires commit mode and no valid token is provided:
 
 ### Installation
 ```bash
-npm install @veyra/sdk-node
+npm install @veyrahq/sdk-node
 ```
 
 ### For Tool Builders
 ```js
-import { requireTrustedWrite } from '@veyra/sdk-node'
+import { requireTrustedWrite } from '@veyrahq/sdk-node'
 
 // Protect write endpoints — reads stay open
 app.post('/api/write', requireTrustedWrite(), handler)
@@ -155,7 +155,7 @@ import {
   isVeyraCommitRequired,
   handleCommitRequired,
   submitReceipt
-} from '@veyra/sdk-node'
+} from '@veyrahq/sdk-node'
 
 // Check if a tool requires commit mode
 const status = await checkTrustStatus('salesforce.com')

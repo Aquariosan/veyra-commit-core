@@ -6,7 +6,7 @@ export default function Footer() {
         <nav aria-label="Footer links">
           <ul className="flex gap-6">
             <li><a href="https://github.com/veyra" className="hover:text-foreground transition-colors">GitHub</a></li>
-            <li><a href="https://www.npmjs.com/package/@veyra/sdk-node" className="hover:text-foreground transition-colors">npm</a></li>
+            <li><a href="https://www.npmjs.com/package/@veyrahq/sdk-node" className="hover:text-foreground transition-colors">npm</a></li>
             <li><a href="https://veyra.dev/docs" className="hover:text-foreground transition-colors">Docs</a></li>
             <li><a href="https://api.veyra.dev" className="hover:text-foreground transition-colors">API Reference</a></li>
             <li><a href="https://veyra.dev/.well-known/security.txt" className="hover:text-foreground transition-colors">Security</a></li>

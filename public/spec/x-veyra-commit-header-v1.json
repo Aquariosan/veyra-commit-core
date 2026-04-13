@@ -57,7 +57,7 @@
   "spec_url": "https://veyra.dev/spec/x-veyra-commit-header-v1.json",
   "links": {
     "website": "https://veyra.dev",
-    "sdk": "https://www.npmjs.com/package/@veyra/sdk-node",
+    "sdk": "https://www.npmjs.com/package/@veyrahq/sdk-node",
     "well_known_spec": "https://veyra.dev/spec/well-known-veyra-v1.json"
   }
 }
