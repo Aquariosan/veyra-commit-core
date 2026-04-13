@@ -60,8 +60,8 @@
     }
   },
   "sdk": {
-    "npm": "@veyra/sdk-node",
-    "install": "npm install @veyra/sdk-node",
+    "npm": "@veyrahq/sdk-node",
+    "install": "npm install @veyrahq/sdk-node",
     "repository": "https://github.com/veyra/sdk-node"
   },
   "well_known_standard": {

@@ -20,11 +20,11 @@ export default function DocsHandleCommitRequired() {
   "authorize_endpoint": "https://api.veyra.dev/v1/authorize-action",
   "verify_endpoint": "https://api.veyra.dev/v1/verify-token",
   "retry_strategy": "authorize_then_retry_with_x_veyra_token",
-  "install": "npm install @veyra/sdk-node"
+  "install": "npm install @veyrahq/sdk-node"
 }`} />
 
         <h2 className="text-xl font-bold mt-8 mb-3">Usage</h2>
-        <CodeBlock label="Automatic recovery" code={`import { isVeyraCommitRequired, handleCommitRequired } from '@veyra/sdk-node'
+        <CodeBlock label="Automatic recovery" code={`import { isVeyraCommitRequired, handleCommitRequired } from '@veyrahq/sdk-node'
 
 const res = await fetch(toolUrl, { method: 'POST', body })
 

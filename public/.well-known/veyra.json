@@ -28,10 +28,10 @@
   "on_write_rejected": {
     "error": "VeyraCommitRequired",
     "retry_strategy": "authorize_then_retry_with_x_veyra_token",
-    "install": "npm install @veyra/sdk-node"
+    "install": "npm install @veyrahq/sdk-node"
   },
   "sdk": {
-    "npm": "@veyra/sdk-node",
+    "npm": "@veyrahq/sdk-node",
     "repository": "https://github.com/veyra/sdk-node",
     "version": "2.4.1"
   },

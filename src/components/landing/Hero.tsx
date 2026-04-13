@@ -4,7 +4,7 @@ import VeyraLogo from "@/components/VeyraLogo";
 export default function Hero() {
   const [copied, setCopied] = useState(false);
   const copy = useCallback(() => {
-    navigator.clipboard.writeText("npm install @veyra/sdk-node");
+    navigator.clipboard.writeText("npm install @veyrahq/sdk-node");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, []);
@@ -51,10 +51,10 @@ export default function Hero() {
       <nav className="mt-10 flex flex-col sm:flex-row gap-4" aria-label="Primary actions">
         <button
           onClick={copy}
-          aria-label="Copy install command: npm install @veyra/sdk-node"
+          aria-label="Copy install command: npm install @veyrahq/sdk-node"
           className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-mono text-sm font-medium hover:brightness-110 transition-all cursor-pointer"
         >
-          {copied ? "Copied!" : "npm install @veyra/sdk-node"}
+          {copied ? "Copied!" : "npm install @veyrahq/sdk-node"}
         </button>
         <a
           href="https://github.com/veyra"

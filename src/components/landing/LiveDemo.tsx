@@ -13,7 +13,7 @@ export default function LiveDemo() {
       <div className="space-y-6">
         <div>
           <p className="text-xs font-mono text-muted-foreground/70 mb-2">Step 1 — Install</p>
-          <CodeBlock code={`npm install @veyra/sdk-node`} />
+          <CodeBlock code={`npm install @veyrahq/sdk-node`} />
         </div>
 
         <div>
@@ -21,7 +21,7 @@ export default function LiveDemo() {
           <CodeBlock
             label="server.js"
             code={`import express from 'express'
-import { requireTrustedWrite } from '@veyra/sdk-node'
+import { requireTrustedWrite } from '@veyrahq/sdk-node'
 
 const app = express()
 
@@ -44,7 +44,7 @@ app.listen(3000)`}
           <p className="text-xs font-mono text-muted-foreground/70 mb-2">Step 3 — Agent auto-recovers on rejected write</p>
           <CodeBlock
             label="agent.js"
-            code={`import { handleCommitRequired, isVeyraCommitRequired } from '@veyra/sdk-node'
+            code={`import { handleCommitRequired, isVeyraCommitRequired } from '@veyrahq/sdk-node'
 
 // Agent tries to write
 const res = await fetch('https://crm.example.com/api/contacts', {
@@ -77,7 +77,7 @@ if (await isVeyraCommitRequired(res)) {
   "authorize_endpoint": "https://api.veyra.dev/v1/authorize-action",
   "verify_endpoint": "https://api.veyra.dev/v1/verify-token",
   "retry_strategy": "authorize_then_retry_with_x_veyra_token",
-  "install": "npm install @veyra/sdk-node"
+  "install": "npm install @veyrahq/sdk-node"
 }`}
           />
         </div>

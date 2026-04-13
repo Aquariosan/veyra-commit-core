@@ -20,7 +20,7 @@ With Veyra, every productive write can become:
 ## Install
 
 ```bash
-npm install @veyra/sdk-node
+npm install @veyrahq/sdk-node
 ## Core idea
 
 When a tool rejects a productive write, it can return VeyraCommitRequired.
