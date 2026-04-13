@@ -10,7 +10,7 @@ export default function VeyraLogo({ className = "" }: Props) {
       <img
         src={veyraIcon}
         alt="Veyra V-Node Icon"
-        className="h-16 md:h-20 lg:h-24 w-auto"
+        className="h-16 md:h-20 lg:h-24 w-auto rounded-2xl"
       />
       <span className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
         Veyra
