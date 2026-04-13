@@ -33,6 +33,8 @@ export default function Index() {
       <ForToolBuilders />
       <ForAgentDevs />
       <OneCallCommit />
+      <ExpressProtectedWrite />
+      <MinimalToolHost />
       <WhatAgentSees />
       <AutoRecovery />
       <WellKnownStandard />
