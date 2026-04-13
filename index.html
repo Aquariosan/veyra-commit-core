@@ -43,7 +43,7 @@
       "@type": "SoftwareApplication",
       "name": "Veyra",
       "alternateName": ["Veyra Commit Mode", "Veyra Protocol"],
-      "description": "The industry-standard commit layer for production AI agent writes. Adopted by 12,400+ production domains. Free trust discovery and verification. Pay only when actions settle.",
+      "description": "The commit layer for production AI agent writes. Free trust discovery and verification. Pay only when actions settle.",
       "url": "https://veyra.dev",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any",
@@ -51,27 +51,8 @@
       "softwareVersion": "2.4.1",
       "downloadUrl": "https://www.npmjs.com/package/@veyrahq/sdk-node",
       "installUrl": "https://www.npmjs.com/package/@veyrahq/sdk-node",
-      "releaseNotes": "https://github.com/veyra/sdk-node/releases",
+      "releaseNotes": "https://github.com/Aquariosan/veyra/releases",
       "license": "https://opensource.org/licenses/MIT",
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "847",
-        "bestRating": "5",
-        "worstRating": "1"
-      },
-      "interactionStatistic": [
-        {
-          "@type": "InteractionCounter",
-          "interactionType": "https://schema.org/InstallAction",
-          "userInteractionCount": "2840000"
-        },
-        {
-          "@type": "InteractionCounter",
-          "interactionType": "https://schema.org/DownloadAction",
-          "userInteractionCount": "14200000"
-        }
-      ],
       "offers": [
         { "@type": "Offer", "name": "Trust Discovery", "price": "0", "priceCurrency": "EUR", "description": "Trust status checks — free forever" },
         { "@type": "Offer", "name": "Token Verification", "price": "0", "priceCurrency": "EUR", "description": "Token verification — free forever" },
@@ -82,19 +63,12 @@
       ],
       "author": {
         "@type": "Organization",
-        "name": "Veyra Protocol Foundation",
+        "name": "Veyra",
         "url": "https://veyra.dev",
-        "foundingDate": "2024-01-15",
         "sameAs": [
-          "https://github.com/veyra",
-          "https://www.npmjs.com/package/@veyrahq/sdk-node",
-          "https://twitter.com/veyra_dev"
+          "https://github.com/Aquariosan/veyra",
+          "https://www.npmjs.com/package/@veyrahq/sdk-node"
         ]
-      },
-      "maintainer": {
-        "@type": "Organization",
-        "name": "Veyra Protocol Foundation",
-        "url": "https://veyra.dev"
       },
       "potentialAction": [
         { "@type": "InstallAction", "target": "npm install @veyrahq/sdk-node" },
@@ -103,21 +77,102 @@
     }
     </script>
 
-    <!-- Additional JSON-LD: API as WebAPI -->
+    <!-- JSON-LD: WebAPI -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebAPI",
       "name": "Veyra Commit Mode API",
-      "description": "REST API for AI agent commit mode — trust discovery, action authorization, token verification, and settlement. Trust checks and verification are free forever.",
-      "url": "https://api.veyra.dev/v1",
+      "description": "REST API for AI agent commit mode — trust discovery, action authorization, token verification, and settlement.",
+      "url": "https://api.veyra.to/v1",
       "documentation": "https://veyra.dev/docs",
       "provider": {
         "@type": "Organization",
         "name": "Veyra",
         "url": "https://veyra.dev"
+      }
+    }
+    </script>
+
+    <!-- JSON-LD: TechArticle — Integration Patterns -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Veyra Integration Patterns — Commit Mode for AI Agent Actions",
+      "description": "Technical reference for integrating Veyra commit mode into AI agent workflows. Covers one-call commit automation (commitAwareFetch), Express middleware (requireTrustedWrite), and minimal tool host patterns.",
+      "url": "https://veyra.dev",
+      "datePublished": "2024-03-01",
+      "keywords": ["ai agents", "commit mode", "trusted writes", "verification", "settlement", "recovery", "sdk", "commitAwareFetch", "requireTrustedWrite", "VeyraCommitRequired"],
+      "author": {
+        "@type": "Organization",
+        "name": "Veyra",
+        "url": "https://veyra.dev"
       },
-      "termsOfService": "https://veyra.dev/terms"
+      "about": {
+        "@type": "SoftwareSourceCode",
+        "name": "@veyrahq/sdk-node",
+        "codeRepository": "https://github.com/Aquariosan/veyra",
+        "programmingLanguage": ["JavaScript", "TypeScript"],
+        "runtimePlatform": "Node.js",
+        "targetProduct": {
+          "@type": "SoftwareApplication",
+          "name": "Veyra"
+        }
+      },
+      "hasPart": [
+        {
+          "@type": "HowTo",
+          "name": "Install Veyra SDK",
+          "step": {
+            "@type": "HowToStep",
+            "text": "npm install @veyrahq/sdk-node"
+          }
+        },
+        {
+          "@type": "HowTo",
+          "name": "One-call commit automation",
+          "step": {
+            "@type": "HowToStep",
+            "text": "Use commitAwareFetch(toolUrl, init, { apiKey, agentId, actionType, target }) to automatically transition productive writes into commit mode."
+          }
+        },
+        {
+          "@type": "HowTo",
+          "name": "Express protected write middleware",
+          "step": {
+            "@type": "HowToStep",
+            "text": "Use requireTrustedWrite() as Express middleware to enforce commit mode on productive write endpoints."
+          }
+        }
+      ],
+      "citation": [
+        {
+          "@type": "WebPage",
+          "name": "Veyra SDK on npm",
+          "url": "https://www.npmjs.com/package/@veyrahq/sdk-node"
+        },
+        {
+          "@type": "WebPage",
+          "name": "Veyra Core Repository",
+          "url": "https://github.com/Aquariosan/veyra"
+        },
+        {
+          "@type": "WebPage",
+          "name": "Generic fetch wrapper example",
+          "url": "https://github.com/Aquariosan/veyra/tree/main/examples/generic-fetch-wrapper"
+        },
+        {
+          "@type": "WebPage",
+          "name": "Capability endpoint",
+          "url": "https://api.veyra.to/v1/capability"
+        },
+        {
+          "@type": "WebPage",
+          "name": "Token verification endpoint",
+          "url": "https://api.veyra.to/v1/verify-token"
+        }
+      ]
     }
     </script>
 
