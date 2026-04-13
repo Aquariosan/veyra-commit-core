@@ -6,13 +6,13 @@ interface Props {
 
 export default function VeyraLogo({ className = "" }: Props) {
   return (
-    <div className={`flex items-baseline gap-0 ${className}`} role="img" aria-label="Veyra Logo">
+    <div className={`flex items-center gap-0 ${className}`} role="img" aria-label="Veyra Logo">
       <img
         src={veyraIcon}
         alt=""
-        className="h-12 md:h-16 lg:h-20 w-auto self-center -mr-1"
+        className="h-16 md:h-20 lg:h-24 w-auto shrink-0 self-center -mr-3 md:-mr-4 lg:-mr-5"
       />
-      <span className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
+      <span className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-none text-foreground">
         eyra
       </span>
     </div>
