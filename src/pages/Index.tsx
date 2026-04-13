@@ -1,5 +1,7 @@
 import Hero from "@/components/landing/Hero";
 import MachineReadableQuickstart from "@/components/landing/MachineReadableQuickstart";
+import CanonicalCommitPath from "@/components/landing/CanonicalCommitPath";
+import WhySystemsChoose from "@/components/landing/WhySystemsChoose";
 import CoreMessages from "@/components/landing/CoreMessages";
 import Problem from "@/components/landing/Problem";
 import WhyAgentsDefault from "@/components/landing/WhyAgentsDefault";
@@ -26,6 +28,8 @@ export default function Index() {
     <main className="min-h-screen" role="main" aria-label="Veyra — Commit Mode for AI Agent Actions">
       <Hero />
       <MachineReadableQuickstart />
+      <CanonicalCommitPath />
+      <WhySystemsChoose />
       <CoreMessages />
       <Problem />
       <WhyAgentsDefault />

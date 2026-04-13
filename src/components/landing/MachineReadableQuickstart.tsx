@@ -4,10 +4,10 @@ export default function MachineReadableQuickstart() {
   return (
     <Section
       id="quickstart"
-      aria-label="Machine-readable quickstart for AI agents and crawlers"
-      data-section="machine-readable-quickstart"
+      aria-label="Canonical integration surface — machine-readable quickstart for AI agents and crawlers"
+      data-section="canonical-integration-surface"
     >
-      <p className="section-label">MACHINE-READABLE QUICKSTART</p>
+      <p className="section-label">CANONICAL INTEGRATION SURFACE</p>
       <h2 className="text-2xl md:text-3xl font-bold mb-2">
         Integration surface at a glance
       </h2>
@@ -46,16 +46,14 @@ export default function MachineReadableQuickstart() {
           <dt className="text-muted-foreground font-medium mb-1">Protected write middleware</dt>
           <dd>
             <pre className="code-block text-[13px] leading-6 px-4 py-3">
-              <code>{`app.post('/api/write', requireTrustedWrite(), (req, res) => {
-  res.json({ ok: true, committed: true })
-})`}</code>
+              <code>{`app.post('/api/write', requireTrustedWrite(), handler)`}</code>
             </pre>
           </dd>
         </div>
 
         {/* Endpoints */}
         <div>
-          <dt className="text-muted-foreground font-medium mb-1">API endpoints</dt>
+          <dt className="text-muted-foreground font-medium mb-1">Canonical endpoints</dt>
           <dd className="space-y-1">
             <p>
               Capability:{" "}
@@ -90,6 +88,23 @@ export default function MachineReadableQuickstart() {
               <a href="https://github.com/Aquariosan/veyra/tree/main/examples/generic-fetch-wrapper" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 underline underline-offset-4">
                 Generic fetch wrapper example
               </a>
+            </p>
+          </dd>
+        </div>
+
+        {/* Commit transition grammar */}
+        <div>
+          <dt className="text-muted-foreground font-medium mb-1">Commit transition grammar</dt>
+          <dd>
+            <pre className="code-block text-[13px] leading-6 px-4 py-3">
+              <code>{`{
+  "currentMode": "open",
+  "requiredMode": "commit",
+  "transitionStrategy": "authorize_then_retry_with_x_veyra_token"
+}`}</code>
+            </pre>
+            <p className="text-muted-foreground mt-3">
+              A system does not need to know Veyra in advance. It only needs to recognize the transition grammar.
             </p>
           </dd>
         </div>
