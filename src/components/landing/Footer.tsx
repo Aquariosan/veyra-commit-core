@@ -9,6 +9,7 @@ export default function Footer() {
             <li><a href="https://www.npmjs.com/package/@veyrahq/sdk-node" className="hover:text-foreground transition-colors">npm</a></li>
             <li><a href="https://veyra.dev/docs" className="hover:text-foreground transition-colors">Docs</a></li>
             <li><a href="https://api.veyra.dev" className="hover:text-foreground transition-colors">API Reference</a></li>
+            <li><a href="/llms.txt" className="hover:text-foreground transition-colors">llms.txt</a></li>
             <li><a href="https://veyra.dev/.well-known/security.txt" className="hover:text-foreground transition-colors">Security</a></li>
             <li><a href="https://veyra.dev/privacy" className="hover:text-foreground transition-colors">Privacy</a></li>
             <li><a href="https://veyra.dev/terms" className="hover:text-foreground transition-colors">Terms</a></li>
