@@ -19,6 +19,7 @@ import MinimalToolHost from "@/components/landing/MinimalToolHost";
 import WhatAgentSees from "@/components/landing/WhatAgentSees";
 import AutoRecovery from "@/components/landing/AutoRecovery";
 import Pricing from "@/components/landing/Pricing";
+import ReferenceTools from "@/components/landing/ReferenceTools";
 import WhyThisScales from "@/components/landing/WhyThisScales";
 import FinalCTA from "@/components/landing/FinalCTA";
 import Footer from "@/components/landing/Footer";
@@ -43,13 +44,9 @@ export default function Index() {
       <MinimalToolHost />
       <WhatAgentSees />
       <AutoRecovery />
+      <ReferenceTools />
       <WellKnownStandard />
       <HttpHeaderStandard />
       <DnsStandard />
       <Pricing />
       <WhyThisScales />
-      <FinalCTA />
-      <Footer />
-    </main>
-  );
-}
