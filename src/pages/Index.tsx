@@ -50,3 +50,8 @@ export default function Index() {
       <DnsStandard />
       <Pricing />
       <WhyThisScales />
+      <FinalCTA />
+      <Footer />
+    </main>
+  );
+}
