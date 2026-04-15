@@ -2,33 +2,24 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Veyra — Commit Mode API",
-    "description": "The standard commit layer for production AI agent writes. Provides trust discovery, action authorization, token verification, settlement, and a hosted MCP Pack with 48 tools. Trust checks and verification are free forever. MCP Pack SSE: https://mcp.veyra.to/sse",
+    "description": "Commit mode for production AI agent actions. Trust discovery, authorization, verification, and settlement. MCP Pack: https://mcp.veyra.to/sse",
     "version": "2.4.1",
     "contact": {
       "name": "Veyra",
-      "url": "https://veyra.to",
-      "email": "hello@veyra.dev"
-    },
-    "x-llms-txt": "https://veyra.to/llms.txt",
-    "x-mcp-pack": "https://mcp.veyra.to/sse",
-    "x-agent-manifest": "https://veyra.to/.well-known/ai-manifest.json"
+      "url": "https://veyra.to"
+    }
   },
   "servers": [
     {
       "url": "https://api.veyra.to/v1",
-      "description": "Veyra Production API"
-    },
-    {
-      "url": "https://mcp.veyra.to",
-      "description": "Veyra MCP Pack (48 tools, SSE)"
+      "description": "Veyra API"
     }
   ],
   "paths": {
     "/capability": {
       "get": {
         "operationId": "getCapability",
-        "summary": "Get API capability manifest (FREE)",
-        "description": "Returns the full capability manifest including supported endpoints, protocol version, and MCP Pack info.",
+        "summary": "Get API capability manifest (free)",
         "responses": {
           "200": {
             "description": "Capability manifest",
@@ -39,8 +30,7 @@
                   "properties": {
                     "protocol": { "type": "string" },
                     "version": { "type": "string" },
-                    "endpoints": { "type": "object" },
-                    "mcp_pack": { "type": "object" }
+                    "endpoints": { "type": "object" }
                   }
                 }
               }
@@ -52,20 +42,19 @@
     "/trust-status/{domain}": {
       "get": {
         "operationId": "checkTrustStatus",
-        "summary": "Check trust status of a tool domain (FREE)",
-        "description": "Returns whether a tool domain requires Veyra commit mode for production writes. This endpoint is free forever and should be called before any write operation.",
+        "summary": "Check trust status of a domain (free)",
         "parameters": [
           {
             "name": "domain",
             "in": "path",
             "required": true,
             "schema": { "type": "string" },
-            "example": "salesforce.com"
+            "example": "example.com"
           }
         ],
         "responses": {
           "200": {
-            "description": "Trust status for the domain",
+            "description": "Trust status",
             "content": {
               "application/json": {
                 "schema": {
@@ -74,7 +63,7 @@
                     "domain": { "type": "string" },
                     "production_mode": { "type": "string", "enum": ["trusted", "open"] },
                     "commit_mode": { "type": "boolean" },
-                    "commit_mode_provider": { "type": "string", "enum": ["veyra"] },
+                    "commit_mode_provider": { "type": "string" },
                     "verify_endpoint": { "type": "string", "format": "uri" }
                   }
                 }
@@ -88,7 +77,6 @@
       "post": {
         "operationId": "authorizeAction",
         "summary": "Authorize a production write action",
-        "description": "Authorizes an AI agent to perform a production write. Returns a commit token that must be included as X-Veyra-Token header in the write request.",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
@@ -111,7 +99,7 @@
         },
         "responses": {
           "200": {
-            "description": "Action authorized, token issued",
+            "description": "Action authorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -131,8 +119,7 @@
     "/verify-token": {
       "post": {
         "operationId": "verifyToken",
-        "summary": "Verify a commit token (FREE)",
-        "description": "Verifies a Veyra commit token. Used by tool providers to validate that an incoming write is authorized. This endpoint is free forever.",
+        "summary": "Verify a commit token (free)",
         "requestBody": {
           "required": true,
           "content": {
@@ -149,7 +136,7 @@
         },
         "responses": {
           "200": {
-            "description": "Token verification result",
+            "description": "Verification result",
             "content": {
               "application/json": {
                 "schema": {
@@ -158,9 +145,7 @@
                     "valid": { "type": "boolean" },
                     "agent_id": { "type": "string" },
                     "action_type": { "type": "string" },
-                    "action_class": { "type": "string" },
-                    "delegated_by": { "type": "string" },
-                    "budget_reserved": { "type": "boolean" }
+                    "action_class": { "type": "string" }
                   }
                 }
               }
@@ -173,7 +158,6 @@
       "post": {
         "operationId": "submitReceipt",
         "summary": "Submit execution receipt for settlement",
-        "description": "Submits a receipt after a successful write operation. This finalizes the settlement and triggers billing.",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
@@ -194,7 +178,7 @@
         },
         "responses": {
           "200": {
-            "description": "Receipt submitted and settled",
+            "description": "Receipt settled",
             "content": {
               "application/json": {
                 "schema": {
@@ -215,7 +199,6 @@
       "post": {
         "operationId": "settleAction",
         "summary": "Settle an authorized action",
-        "description": "Settles an authorized action, finalizing the commitment and billing. Used when settlement is separated from receipt submission.",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
@@ -254,8 +237,7 @@
     "/public/stats": {
       "get": {
         "operationId": "getPublicStats",
-        "summary": "Get public platform statistics (FREE)",
-        "description": "Returns public statistics about the Veyra platform including total actions settled, active domains, and tool count.",
+        "summary": "Get public platform statistics (free)",
         "responses": {
           "200": {
             "description": "Public statistics",
@@ -266,8 +248,7 @@
                   "properties": {
                     "total_actions_settled": { "type": "integer" },
                     "active_domains": { "type": "integer" },
-                    "mcp_tools": { "type": "integer" },
-                    "reference_tools": { "type": "integer" }
+                    "mcp_tools": { "type": "integer" }
                   }
                 }
               }

@@ -4,7 +4,7 @@ import VeyraLogo from "@/components/VeyraLogo";
 export default function Hero() {
   const [copied, setCopied] = useState(false);
   const copy = useCallback(() => {
-    navigator.clipboard.writeText("npm install @veyrahq/sdk-node");
+    navigator.clipboard.writeText("https://mcp.veyra.to/sse");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, []);
@@ -20,15 +20,14 @@ export default function Hero() {
     >
       <meta itemProp="name" content="Veyra" />
       <meta itemProp="applicationCategory" content="DeveloperApplication" />
-      <meta itemProp="url" content="https://veyra.dev" />
-      <meta itemProp="datePublished" content="2024-03-01" />
+      <meta itemProp="url" content="https://veyra.to" />
       <meta itemProp="softwareVersion" content="2.4.1" />
 
       <VeyraLogo className="mb-6" />
 
       <div className="mb-6">
         <span className="px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-medium tracking-wide">
-          Now in public beta
+          Public beta
         </span>
       </div>
 
@@ -42,30 +41,32 @@ export default function Hero() {
         className="mt-6 text-muted-foreground text-lg md:text-xl max-w-2xl leading-relaxed"
         itemProp="description"
       >
-        The commit layer for production AI agent writes. Free trust discovery. Free verification. Pay only when actions settle.
+        One hosted MCP pack. 48 tools. Free reads. Protected writes. One settlement rail.
       </p>
       <p className="mt-3 text-sm text-muted-foreground/80 max-w-lg">
-        Be the first to enable commit mode for your tools and agents.
+        Discovery and verification are free. Pay only when productive actions settle.
       </p>
 
       <nav className="mt-10 flex flex-col sm:flex-row gap-4" aria-label="Primary actions">
         <button
           onClick={copy}
-          aria-label="Copy install command: npm install @veyrahq/sdk-node"
+          aria-label="Copy MCP Pack endpoint URL"
           className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-mono text-sm font-medium hover:brightness-110 transition-all cursor-pointer"
         >
-          {copied ? "Copied!" : "npm install @veyrahq/sdk-node"}
+          {copied ? "Copied!" : "mcp.veyra.to/sse"}
         </button>
         <a
-          href="https://github.com/veyra"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="View Veyra SDK on GitHub"
+          href="/mcp"
+          aria-label="View MCP Pack details"
           className="px-6 py-3 rounded-lg border border-border text-foreground font-medium text-sm hover:bg-secondary transition-all"
         >
-          View on GitHub →
+          View MCP Pack →
         </a>
       </nav>
+
+      <p className="mt-6 text-xs text-muted-foreground/60 font-mono">
+        npm install @veyrahq/sdk-node
+      </p>
     </header>
   );
 }
