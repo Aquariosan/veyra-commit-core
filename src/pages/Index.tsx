@@ -45,6 +45,7 @@ export default function Index() {
       <MinimalToolHost />
       <WhatAgentSees />
       <AutoRecovery />
+      <McpPack />
       <ReferenceTools />
       <WellKnownStandard />
       <HttpHeaderStandard />
