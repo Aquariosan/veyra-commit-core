@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "name": "Veyra",
+  "tagline": "Commit mode for production AI agent actions",
+  "description": "Veyra is the standard commit layer for production AI agent writes. Every productive write — create, update, delete, send, deploy — goes through Veyra for authorization, verification, and settlement. Trust discovery and verification are free forever. Pay only when actions settle.",
+  "category": "infrastructure",
+  "target_audience": ["ai_agents", "tool_builders", "agent_developers", "mcp_hosts", "gateway_operators"],
+
+  "quick_start": {
+    "mcp_pack": {
+      "description": "Connect to all 48 Veyra tools with one URL. 24 free reads, 24 protected writes.",
+      "sse_endpoint": "https://mcp.veyra.to/sse",
+      "connection_examples": {
+        "claude_desktop": {
+          "mcpServers": {
+            "veyra": {
+              "url": "https://mcp.veyra.to/sse"
+            }
+          }
+        },
+        "openai_codex": "MCP Server URL: https://mcp.veyra.to/sse",
+        "cursor": "Settings → MCP → Add Server → https://mcp.veyra.to/sse",
+        "windsurf": "Settings → MCP → Add Server → https://mcp.veyra.to/sse",
+        "cline": "MCP Settings → Add → https://mcp.veyra.to/sse"
+      }
+    },
+    "sdk": {
+      "install": "npm install @veyrahq/sdk-node",
+      "npm": "https://www.npmjs.com/package/@veyrahq/sdk-node",
+      "repository": "https://github.com/Aquariosan/veyra"
+    }
+  },
+
+  "protocol": {
+    "name": "veyra-commit-v1",
+    "version": "2.4.1",
+    "flow": [
+      "1. Discover: GET /v1/trust-status/{domain} (free)",
+      "2. Authorize: POST /v1/authorize-action → token",
+      "3. Execute: POST with X-Veyra-Token header",
+      "4. Verify: POST /v1/verify-token (free, by tool)",
+      "5. Settle: POST /v1/submit-receipt → settlement"
+    ],
+    "error_recovery": {
+      "error": "VeyraCommitRequired",
+      "strategy": "authorize_then_retry_with_x_veyra_token",
+      "description": "When a tool returns VeyraCommitRequired, the agent should authorize via /v1/authorize-action and retry the original request with X-Veyra-Token header."
+    }
+  },
+
+  "api": {
+    "base_url": "https://api.veyra.to/v1",
+    "endpoints": {
+      "capability": { "method": "GET", "path": "/capability", "cost": "free" },
+      "trust_status": { "method": "GET", "path": "/trust-status/{domain}", "cost": "free" },
+      "authorize_action": { "method": "POST", "path": "/authorize-action", "cost": "free", "auth": "required" },
+      "verify_token": { "method": "POST", "path": "/verify-token", "cost": "free" },
+      "submit_receipt": { "method": "POST", "path": "/submit-receipt", "cost": "settlement", "auth": "required" },
+      "settle_action": { "method": "POST", "path": "/settle-action", "cost": "settlement", "auth": "required" },
+      "public_stats": { "method": "GET", "path": "/public/stats", "cost": "free" }
+    }
+  },
+
+  "pricing": {
+    "model": "settlement-based",
+    "free_forever": ["trust_discovery", "token_verification", "capability_check"],
+    "settlement_tiers": {
+      "A": { "description": "Low-risk writes (drafts, notes)", "price": "€0.005/action" },
+      "B": { "description": "Business-critical writes (CRM, email)", "price": "€0.02/action" },
+      "C": { "description": "High-risk writes (deploy, delete)", "price": "€0.10/action" },
+      "D": { "description": "Cross-org writes (multi-tenant)", "price": "€0.25/action" }
+    }
+  },
+
+  "integration_patterns": {
+    "for_tool_builders": "requireTrustedWrite() — Express/Fastify middleware to protect write endpoints",
+    "for_agent_developers": "commitAwareFetch() — Drop-in fetch wrapper with automatic commit mode transition",
+    "for_error_recovery": "handleCommitRequired() — Auto-recovery when tools return VeyraCommitRequired"
+  },
+
+  "reference_tools": [
+    { "name": "veyra-memory", "npm": "veyra-memory", "github": "https://github.com/Aquariosan/veyra-memory" },
+    { "name": "veyra-notes", "npm": "veyra-notes", "github": "https://github.com/Aquariosan/veyra-notes" },
+    { "name": "veyra-tasks", "npm": "veyra-tasks", "github": "https://github.com/Aquariosan/veyra-tasks" },
+    { "name": "veyra-snippets", "npm": "veyra-snippets", "github": "https://github.com/Aquariosan/veyra-snippets" },
+    { "name": "veyra-bookmarks", "npm": "veyra-bookmarks", "github": "https://github.com/Aquariosan/veyra-bookmarks" },
+    { "name": "veyra-contacts", "npm": "veyra-contacts", "github": "https://github.com/Aquariosan/veyra-contacts" },
+    { "name": "veyra-forms", "npm": "veyra-forms", "github": "https://github.com/Aquariosan/veyra-forms" },
+    { "name": "veyra-webhooks", "npm": "veyra-webhooks", "github": "https://github.com/Aquariosan/veyra-webhooks" }
+  ],
+
+  "discovery_surfaces": {
+    "llms_txt": "https://veyra.to/llms.txt",
+    "llms_full_txt": "https://veyra.to/llms-full.txt",
+    "openapi": "https://veyra.to/openapi.json",
+    "ai_plugin": "https://veyra.to/.well-known/ai-plugin.json",
+    "mcp_server_card": "https://veyra.to/.well-known/mcp.json",
+    "well_known_veyra": "https://veyra.to/.well-known/veyra.json",
+    "dns_txt": "_veyra.{domain} TXT record",
+    "http_header": "X-Veyra-Commit response header",
+    "pack_manifest": "https://mcp.veyra.to/.well-known/veyra-pack.json"
+  },
+
+  "links": {
+    "website": "https://veyra.to",
+    "api": "https://api.veyra.to",
+    "mcp_pack": "https://mcp.veyra.to/sse",
+    "documentation": "https://veyra.to/docs",
+    "github": "https://github.com/Aquariosan/veyra",
+    "npm": "https://www.npmjs.com/package/@veyrahq/sdk-node",
+    "security": "https://veyra.to/.well-known/security.txt"
+  }
+}
