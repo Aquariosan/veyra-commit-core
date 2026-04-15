@@ -19,6 +19,7 @@ import MinimalToolHost from "@/components/landing/MinimalToolHost";
 import WhatAgentSees from "@/components/landing/WhatAgentSees";
 import AutoRecovery from "@/components/landing/AutoRecovery";
 import Pricing from "@/components/landing/Pricing";
+import McpPack from "@/components/landing/McpPack";
 import ReferenceTools from "@/components/landing/ReferenceTools";
 import WhyThisScales from "@/components/landing/WhyThisScales";
 import FinalCTA from "@/components/landing/FinalCTA";
