@@ -10,6 +10,7 @@ import DocsCommitMode from "./pages/docs/CommitMode.tsx";
 import DocsHandleCommitRequired from "./pages/docs/HandleCommitRequired.tsx";
 import DocsApiReference from "./pages/docs/ApiReference.tsx";
 import DocsPricing from "./pages/docs/DocsPricing.tsx";
+import McpPage from "./pages/McpPage.tsx";
 
 const queryClient = new QueryClient();
 
