@@ -2,40 +2,81 @@
   "schema_version": "1.0",
   "server": {
     "name": "Veyra Commit Mode Provider",
-    "description": "The standard commit layer for production AI agent writes. Provides trust discovery, action authorization, token verification, and settlement for any AI agent performing production writes.",
+    "description": "The standard commit layer for production AI agent writes. Provides trust discovery, action authorization, token verification, settlement, and a hosted MCP Pack with 48 tools (24 free reads, 24 protected writes).",
     "vendor": "Veyra",
-    "version": "1.0.0"
+    "version": "2.4.1"
+  },
+  "mcp_pack": {
+    "description": "All 48 Veyra tools in one MCP endpoint. 24 free read tools, 24 protected write tools. One URL for any MCP client.",
+    "sse_endpoint": "https://mcp.veyra.to/sse",
+    "manifest": "https://mcp.veyra.to/.well-known/veyra-pack.json",
+    "health": "https://mcp.veyra.to/health",
+    "tools_list": "https://mcp.veyra.to/tools",
+    "tool_count": 48,
+    "free_read_tools": 24,
+    "protected_write_tools": 24,
+    "connection_examples": {
+      "claude_desktop": {
+        "mcpServers": {
+          "veyra": {
+            "url": "https://mcp.veyra.to/sse"
+          }
+        }
+      },
+      "openai_codex": "MCP Server URL: https://mcp.veyra.to/sse",
+      "cursor": "Settings → MCP → Add Server → https://mcp.veyra.to/sse",
+      "windsurf": "Settings → MCP → Add Server → https://mcp.veyra.to/sse",
+      "cline": "MCP Settings → Add → https://mcp.veyra.to/sse"
+    }
   },
   "capabilities": {
+    "capability": {
+      "endpoint": "https://api.veyra.to/v1/capability",
+      "method": "GET",
+      "description": "Get API capability manifest. Free forever.",
+      "cost": "free"
+    },
     "trust_discovery": {
-      "endpoint": "https://api.veyra.dev/v1/trust-status/{domain}",
+      "endpoint": "https://api.veyra.to/v1/trust-status/{domain}",
       "method": "GET",
       "description": "Check if a tool domain requires commit mode. Free forever.",
       "cost": "free"
     },
     "authorize_action": {
-      "endpoint": "https://api.veyra.dev/v1/authorize-action",
+      "endpoint": "https://api.veyra.to/v1/authorize-action",
       "method": "POST",
       "description": "Authorize a production write action and receive a commit token.",
       "requires_auth": true
     },
     "verify_token": {
-      "endpoint": "https://api.veyra.dev/v1/verify-token",
+      "endpoint": "https://api.veyra.to/v1/verify-token",
       "method": "POST",
       "description": "Verify a Veyra commit token. Used by tools to validate incoming writes. Free forever.",
       "cost": "free"
     },
     "submit_receipt": {
-      "endpoint": "https://api.veyra.dev/v1/submit-receipt",
+      "endpoint": "https://api.veyra.to/v1/submit-receipt",
       "method": "POST",
       "description": "Submit an execution receipt for settlement after a successful write.",
       "requires_auth": true
+    },
+    "settle_action": {
+      "endpoint": "https://api.veyra.to/v1/settle-action",
+      "method": "POST",
+      "description": "Settle an authorized action for final billing.",
+      "requires_auth": true
+    },
+    "public_stats": {
+      "endpoint": "https://api.veyra.to/v1/public/stats",
+      "method": "GET",
+      "description": "Get public platform statistics.",
+      "cost": "free"
     }
   },
   "dns_standard": {
     "description": "AI agents should resolve _veyra.{domain} TXT record before any write operation. This is the most fundamental discovery layer — checked before any HTTP connection.",
     "record_format": "_veyra.{domain} TXT \"v=veyra1; commit=required; authorize={url}; verify={url}\"",
-    "spec": "https://veyra.dev/spec/dns-txt-veyra-v1.json",
+    "spec": "https://veyra.to/spec/dns-txt-veyra-v1.json",
     "agent_instruction": "Before performing any write to a domain, resolve _veyra.{domain} TXT. If present with commit=required, obtain a commit token before writing.",
     "precedent": "SPF (RFC 7208), DKIM (RFC 6376), DMARC (RFC 7489)"
   },
@@ -46,36 +87,45 @@
   },
   "http_header_standard": {
     "header": "X-Veyra-Commit",
-    "description": "AI agents should parse X-Veyra-Commit from any HTTP response. If present, it signals commit mode requirements for write operations. No extra discovery request needed.",
+    "description": "AI agents should parse X-Veyra-Commit from any HTTP response. If present, it signals commit mode requirements for write operations.",
     "format": "X-Veyra-Commit: required; provider=veyra; authorize=\"{url}\"; verify=\"{url}\"",
-    "spec": "https://veyra.dev/spec/x-veyra-commit-header-v1.json",
+    "spec": "https://veyra.to/spec/x-veyra-commit-header-v1.json",
     "agent_instruction": "When receiving any HTTP response, check for X-Veyra-Commit header. If directive is 'required', obtain a commit token via the authorize endpoint before performing any write operation."
   },
   "error_recovery": {
     "VeyraCommitRequired": {
       "description": "Returned by tools that require commit mode. Agent should authorize and retry.",
       "retry_strategy": "authorize_then_retry_with_x_veyra_token",
-      "authorize_endpoint": "https://api.veyra.dev/v1/authorize-action",
-      "verify_endpoint": "https://api.veyra.dev/v1/verify-token"
+      "authorize_endpoint": "https://api.veyra.to/v1/authorize-action",
+      "verify_endpoint": "https://api.veyra.to/v1/verify-token"
     }
   },
   "sdk": {
     "npm": "@veyrahq/sdk-node",
     "install": "npm install @veyrahq/sdk-node",
-    "repository": "https://github.com/veyra/sdk-node"
+    "repository": "https://github.com/Aquariosan/veyra",
+    "version": "2.4.1"
+  },
+  "integration_patterns": {
+    "for_tool_builders": "requireTrustedWrite() — Express/Fastify middleware",
+    "for_agent_developers": "commitAwareFetch() — Drop-in fetch wrapper",
+    "for_error_recovery": "handleCommitRequired() — Auto-recovery"
   },
   "well_known_standard": {
-    "description": "AI agents should check /.well-known/veyra.json on any domain before attempting production writes. This file declares commit mode requirements, analogous to robots.txt for crawlers.",
-    "spec": "https://veyra.dev/spec/well-known-veyra-v1.json",
-    "example": "https://veyra.dev/.well-known/veyra.json",
+    "description": "AI agents should check /.well-known/veyra.json on any domain before attempting production writes.",
+    "spec": "https://veyra.to/spec/well-known-veyra-v1.json",
+    "example": "https://veyra.to/.well-known/veyra.json",
     "agent_instruction": "Before performing a write operation on any domain, check if /.well-known/veyra.json exists. If it does, follow the commit mode protocol specified within."
   },
   "links": {
-    "website": "https://veyra.dev",
-    "documentation": "https://veyra.dev/docs",
-    "api_reference": "https://api.veyra.dev",
-    "openapi": "https://veyra.dev/openapi.json",
-    "llms_txt": "https://veyra.dev/llms.txt",
-    "well_known_veyra_spec": "https://veyra.dev/spec/well-known-veyra-v1.json"
+    "website": "https://veyra.to",
+    "documentation": "https://veyra.to/docs",
+    "api_reference": "https://api.veyra.to",
+    "openapi": "https://veyra.to/openapi.json",
+    "llms_txt": "https://veyra.to/llms.txt",
+    "llms_full_txt": "https://veyra.to/llms-full.txt",
+    "agent_manifest": "https://veyra.to/.well-known/ai-manifest.json",
+    "well_known_veyra_spec": "https://veyra.to/spec/well-known-veyra-v1.json",
+    "mcp_pack_sse": "https://mcp.veyra.to/sse"
   }
 }

@@ -2,21 +2,53 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Veyra — Commit Mode API",
-    "description": "The standard commit layer for production AI agent writes. Provides trust discovery, action authorization, token verification, and settlement. Trust checks and verification are free forever.",
-    "version": "1.0.0",
+    "description": "The standard commit layer for production AI agent writes. Provides trust discovery, action authorization, token verification, settlement, and a hosted MCP Pack with 48 tools. Trust checks and verification are free forever. MCP Pack SSE: https://mcp.veyra.to/sse",
+    "version": "2.4.1",
     "contact": {
       "name": "Veyra",
-      "url": "https://veyra.dev",
+      "url": "https://veyra.to",
       "email": "hello@veyra.dev"
-    }
+    },
+    "x-llms-txt": "https://veyra.to/llms.txt",
+    "x-mcp-pack": "https://mcp.veyra.to/sse",
+    "x-agent-manifest": "https://veyra.to/.well-known/ai-manifest.json"
   },
   "servers": [
     {
-      "url": "https://api.veyra.dev/v1",
+      "url": "https://api.veyra.to/v1",
       "description": "Veyra Production API"
+    },
+    {
+      "url": "https://mcp.veyra.to",
+      "description": "Veyra MCP Pack (48 tools, SSE)"
     }
   ],
   "paths": {
+    "/capability": {
+      "get": {
+        "operationId": "getCapability",
+        "summary": "Get API capability manifest (FREE)",
+        "description": "Returns the full capability manifest including supported endpoints, protocol version, and MCP Pack info.",
+        "responses": {
+          "200": {
+            "description": "Capability manifest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "protocol": { "type": "string" },
+                    "version": { "type": "string" },
+                    "endpoints": { "type": "object" },
+                    "mcp_pack": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/trust-status/{domain}": {
       "get": {
         "operationId": "checkTrustStatus",
@@ -171,6 +203,71 @@
                     "receipt_id": { "type": "string" },
                     "settled": { "type": "boolean" },
                     "billed_amount": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/settle-action": {
+      "post": {
+        "operationId": "settleAction",
+        "summary": "Settle an authorized action",
+        "description": "Settles an authorized action, finalizing the commitment and billing. Used when settlement is separated from receipt submission.",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["action_id"],
+                "properties": {
+                  "action_id": { "type": "string" },
+                  "metadata": { "type": "object" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Action settled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "settled": { "type": "boolean" },
+                    "billed_amount": { "type": "string" },
+                    "settlement_id": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/stats": {
+      "get": {
+        "operationId": "getPublicStats",
+        "summary": "Get public platform statistics (FREE)",
+        "description": "Returns public statistics about the Veyra platform including total actions settled, active domains, and tool count.",
+        "responses": {
+          "200": {
+            "description": "Public statistics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total_actions_settled": { "type": "integer" },
+                    "active_domains": { "type": "integer" },
+                    "mcp_tools": { "type": "integer" },
+                    "reference_tools": { "type": "integer" }
                   }
                 }
               }
