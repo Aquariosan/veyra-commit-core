@@ -10,6 +10,7 @@ import DocsCommitMode from "./pages/docs/CommitMode.tsx";
 import DocsHandleCommitRequired from "./pages/docs/HandleCommitRequired.tsx";
 import DocsApiReference from "./pages/docs/ApiReference.tsx";
 import DocsPricing from "./pages/docs/DocsPricing.tsx";
+import McpPage from "./pages/McpPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/docs/handle-commit-required" element={<DocsHandleCommitRequired />} />
           <Route path="/docs/api-reference" element={<DocsApiReference />} />
           <Route path="/docs/pricing" element={<DocsPricing />} />
+          <Route path="/mcp" element={<McpPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -1,4 +1,10 @@
 Contact: mailto:security@veyra.dev
-Expires: 2027-04-12T00:00:00.000Z
+Expires: 2027-04-15T00:00:00.000Z
 Preferred-Languages: en, de
-Canonical: https://veyra.dev/.well-known/security.txt
+Canonical: https://veyra.to/.well-known/security.txt
+Policy: https://veyra.to/security
+
+# Veyra — Commit Mode for AI Agent Actions
+# MCP Pack: https://mcp.veyra.to/sse
+# API: https://api.veyra.to/v1
+# SDK: npm install @veyrahq/sdk-node
