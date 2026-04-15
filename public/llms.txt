@@ -31,6 +31,18 @@ Core integration patterns:
 - commitAwareFetch()
 - handleCommitRequired()
 
+Reference tools (all on npm):
+- veyra-memory: persistent key-value store
+- veyra-notes: note-taking with tags
+- veyra-tasks: task management
+- veyra-snippets: code snippet storage
+- veyra-bookmarks: bookmark manager
+- veyra-contacts: contact management
+- veyra-forms: form builder
+- veyra-webhooks: webhook sender
+
+All tools: reads free, writes require Veyra commit mode.
+
 Examples:
 https://github.com/Aquariosan/veyra/tree/main/examples/fastify-protected-write
 https://github.com/Aquariosan/veyra/tree/main/examples/agent-retry-flow
