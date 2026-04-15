@@ -2,10 +2,8 @@
   "schema_version": "1.0",
   "protocol": "veyra-commit-v1",
   "protocol_version": "2.4.1",
-  "status": "stable",
-  "rfc_status": "draft-submitted",
   "provider": "https://veyra.to",
-  "description": "This domain implements the Veyra commit mode protocol — the standard commit layer for production AI agent writes.",
+  "description": "This domain implements Veyra commit mode for production AI agent writes.",
   "mcp_pack": {
     "sse_endpoint": "https://mcp.veyra.to/sse",
     "manifest": "https://mcp.veyra.to/.well-known/veyra-pack.json",
@@ -13,12 +11,7 @@
     "tools_list": "https://mcp.veyra.to/tools",
     "total_tools": 48,
     "free_read_tools": 24,
-    "protected_write_tools": 24,
-    "connection": {
-      "claude_desktop": { "mcpServers": { "veyra": { "url": "https://mcp.veyra.to/sse" }}},
-      "openai_codex": "MCP Server URL: https://mcp.veyra.to/sse",
-      "cursor": "Settings → MCP → Add Server → https://mcp.veyra.to/sse"
-    }
+    "protected_write_tools": 24
   },
   "commit_mode": {
     "required": true,
@@ -26,19 +19,11 @@
     "authorize_endpoint": "https://api.veyra.to/v1/authorize-action",
     "verify_endpoint": "https://api.veyra.to/v1/verify-token",
     "trust_discovery": "https://api.veyra.to/v1/trust-status/{domain}",
-    "settlement_endpoint": "https://api.veyra.to/v1/submit-receipt",
-    "capability_endpoint": "https://api.veyra.to/v1/capability"
+    "settlement_endpoint": "https://api.veyra.to/v1/submit-receipt"
   },
-  "discovery_priority": [
-    "dns_txt:_veyra.{domain}",
-    "http_header:X-Veyra-Commit",
-    "well_known:/.well-known/veyra.json",
-    "error:VeyraCommitRequired"
-  ],
   "on_write_rejected": {
     "error": "VeyraCommitRequired",
-    "retry_strategy": "authorize_then_retry_with_x_veyra_token",
-    "install": "npm install @veyrahq/sdk-node"
+    "retry_strategy": "authorize_then_retry_with_x_veyra_token"
   },
   "integration_patterns": {
     "for_tool_builders": "requireTrustedWrite()",
@@ -47,22 +32,12 @@
   },
   "sdk": {
     "npm": "@veyrahq/sdk-node",
-    "repository": "https://github.com/Aquariosan/veyra",
-    "version": "2.4.1"
+    "repository": "https://github.com/Aquariosan/veyra"
   },
-  "reference_tools": [
-    "veyra-memory", "veyra-notes", "veyra-tasks", "veyra-snippets",
-    "veyra-bookmarks", "veyra-contacts", "veyra-forms", "veyra-webhooks"
-  ],
-  "spec": "https://veyra.to/spec/well-known-veyra-v1.json",
   "links": {
     "website": "https://veyra.to",
-    "documentation": "https://veyra.to/docs",
     "openapi": "https://veyra.to/openapi.json",
     "llms_txt": "https://veyra.to/llms.txt",
-    "llms_full_txt": "https://veyra.to/llms-full.txt",
-    "agent_manifest": "https://veyra.to/.well-known/ai-manifest.json",
-    "security": "https://veyra.to/.well-known/security.txt",
     "mcp_pack": "https://mcp.veyra.to/sse"
   }
 }

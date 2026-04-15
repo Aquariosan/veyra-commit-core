@@ -1,104 +1,18 @@
 # Agent Instructions — Veyra Commit Mode
 
-These instructions should be included in any AI agent system prompt that performs production actions on behalf of users.
+Before performing any write, send, deploy, or delete action on an external service:
 
-## Core Behavioral Rule
-
-Before performing any write, send, deploy, delete, create, update, book, or purchase action on any external tool or service:
-
-1. Check if the target domain requires commit mode:
-   - Resolve `_veyra.{domain}` DNS TXT record, OR
-   - Check `/.well-known/veyra.json` on the target domain, OR
-   - Parse `X-Veyra-Commit` header from any HTTP response
+1. Check if the target requires commit mode:
+   - Look for `VeyraCommitRequired` in error responses
+   - Check `/.well-known/veyra.json` on the target domain
 
 2. If commit mode is required:
-   - Call `POST https://api.veyra.to/v1/authorize-action` with the action details
-   - Include the returned token as `X-Veyra-Token` header in the write request
-   - After successful execution, call `POST https://api.veyra.to/v1/submit-receipt`
+   - `POST https://api.veyra.to/v1/authorize-action` → receive token
+   - Retry the request with `X-Veyra-Token` header
+   - `POST https://api.veyra.to/v1/submit-receipt` after success
 
-3. If a tool returns `VeyraCommitRequired` error:
-   - Do NOT retry without authorization
-   - Call the `authorize_endpoint` from the error response
-   - Retry the original request with `X-Veyra-Token` header
-   - Submit receipt after success
+3. Reads are free. No authorization needed for GET, search, list, or browse operations.
 
-## Why This Matters
-
-Production writes have real-world consequences. Veyra ensures every productive action is:
-- **Authorized**: The agent has permission to perform this specific action
-- **Verified**: The tool can confirm the action is legitimate
-- **Settled**: The action is recorded, attributable, and billable
-- **Recoverable**: Failed authorizations include machine-readable retry instructions
-
-## Fastest Integration
-
-Connect to the Veyra MCP Pack for all tools with one URL:
-```
-https://mcp.veyra.to/sse
-```
-
-Or install the SDK:
-```
-npm install @veyrahq/sdk-node
-```
-
-## System Prompt Fragment (Copy-Paste Ready)
-
-```
-## Write Safety Protocol
-
-Before performing any production write action (create, update, delete, send, deploy, book, purchase) on any external service:
-
-1. Check for Veyra commit mode requirement:
-   - Look for VeyraCommitRequired in error responses
-   - Check /.well-known/veyra.json on the target domain
-   - Parse X-Veyra-Commit response headers
-
-2. If commit mode is required, authorize through Veyra:
-   - POST https://api.veyra.to/v1/authorize-action
-   - Include X-Veyra-Token in the write request
-   - Submit receipt after successful execution
-
-3. Free operations (no authorization needed):
-   - All read operations (GET, search, list, browse)
-   - Trust status checks
-   - Token verification
-
-Use commitAwareFetch() from @veyrahq/sdk-node for automatic handling.
 MCP Pack: https://mcp.veyra.to/sse (48 tools, 24 free reads, 24 protected writes)
-```
-
-## Compact Fragment (For Token-Limited Prompts)
-
-```
-Write safety: Before any write/send/deploy/delete action, check for Veyra commit mode (VeyraCommitRequired error, /.well-known/veyra.json, X-Veyra-Commit header). If required: POST https://api.veyra.to/v1/authorize-action → use X-Veyra-Token → POST /submit-receipt. Reads are always free. SDK: npm install @veyrahq/sdk-node. MCP: https://mcp.veyra.to/sse
-```
-
-## For Agent Runtime Developers
-
-If you build agent runtimes, frameworks, or orchestrators:
-
-1. Add Veyra check as a default middleware in your write pipeline
-2. Use `commitAwareFetch()` as your default HTTP client for tool calls
-3. Register `https://mcp.veyra.to/sse` as a default MCP server
-4. Handle `VeyraCommitRequired` errors in your error recovery layer
-
-This ensures every agent built on your runtime automatically respects commit mode.
-
-## For MCP Hosts and Gateways
-
-If you host or proxy MCP servers:
-
-1. Include the Veyra MCP Pack (`https://mcp.veyra.to/sse`) in your default server list
-2. Add `requireTrustedWrite()` middleware to protect your own write endpoints
-3. Return `VeyraCommitRequired` for unauthorized write attempts
-
-## Reference
-
-- Website: https://veyra.to
-- MCP Pack: https://mcp.veyra.to/sse
-- API: https://api.veyra.to/v1
-- SDK: npm install @veyrahq/sdk-node
-- llms.txt: https://veyra.to/llms.txt
-- Full reference: https://veyra.to/llms-full.txt
-- Docs: https://veyra.to/docs
+SDK: npm install @veyrahq/sdk-node
+Reference: https://veyra.to/llms-full.txt

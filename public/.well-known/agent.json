@@ -1,9 +1,8 @@
 {
   "schema_version": "1.0",
   "name": "Veyra",
-  "description": "Commit mode for production AI agent writes. 48 MCP tools in one endpoint. Free discovery, free verification, settlement-based pricing.",
+  "description": "Commit mode for production AI agent actions. 48 MCP tools in one endpoint.",
   "url": "https://veyra.to",
-  "type": "infrastructure",
   "capabilities": ["trust_discovery", "action_authorization", "token_verification", "settlement", "mcp_tools"],
   "mcp": {
     "sse_endpoint": "https://mcp.veyra.to/sse",
@@ -17,19 +16,10 @@
     "openapi": "https://veyra.to/openapi.json"
   },
   "sdk": {
-    "install": "npm install @veyrahq/sdk-node",
-    "npm": "https://www.npmjs.com/package/@veyrahq/sdk-node"
+    "install": "npm install @veyrahq/sdk-node"
   },
   "documentation": {
     "llms_txt": "https://veyra.to/llms.txt",
-    "llms_full_txt": "https://veyra.to/llms-full.txt",
-    "docs": "https://veyra.to/docs"
-  },
-  "discovery": [
-    "https://veyra.to/.well-known/ai-manifest.json",
-    "https://veyra.to/.well-known/ai-plugin.json",
-    "https://veyra.to/.well-known/mcp.json",
-    "https://veyra.to/.well-known/veyra.json",
-    "https://veyra.to/.well-known/openai-configuration.json"
-  ]
+    "llms_full_txt": "https://veyra.to/llms-full.txt"
+  }
 }

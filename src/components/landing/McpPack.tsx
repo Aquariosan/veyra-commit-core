@@ -64,10 +64,10 @@ function CopyBtn({ text }: { text: string }) {
 
 export default function McpPack() {
   return (
-    <Section aria-label="Veyra MCP Pack — 48 tools, one SSE endpoint for any MCP client" data-section="mcp-pack">
+    <Section aria-label="Veyra MCP Pack — 48 tools, one SSE endpoint" data-section="mcp-pack">
       <p className="section-label">MCP PACK</p>
       <h2 className="text-2xl md:text-3xl font-bold mb-1">Veyra MCP Pack</h2>
-      <p className="text-muted-foreground text-sm mb-8">All tools. One URL. Any client.</p>
+      <p className="text-muted-foreground text-sm mb-8">All tools. One URL.</p>
 
       {/* Fact grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
@@ -81,11 +81,11 @@ export default function McpPack() {
       </div>
 
       <p className="text-foreground/90 text-sm mb-1">
-        Free reads stay open. State-changing and consequential writes run through{" "}
+        Free reads stay open. State-changing writes run through{" "}
         <span className="text-primary">Veyra commit mode</span>.
       </p>
       <p className="text-muted-foreground text-xs mb-8">
-        Designed for agents, hosts, gateways, runtimes, and builders who want one MCP endpoint instead of many separate tool installs.
+        Use the hosted pack for the fastest integration path across all Veyra tool families.
       </p>
 
       {/* Connection examples */}
@@ -106,7 +106,7 @@ export default function McpPack() {
 
       {/* Tool domains */}
       <div className="border border-border/40 rounded-xl p-4 bg-card/30 mb-8">
-        <p className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-3">8 tool domains × 6 tools each</p>
+        <p className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-3">8 tool domains</p>
         <div className="flex flex-wrap gap-2">
           {["memory", "notes", "tasks", "snippets", "bookmarks", "contacts", "forms", "webhooks"].map((t) => (
             <span key={t} className="px-2.5 py-1 rounded-md bg-muted/50 border border-border/40 text-[11px] font-mono text-primary/80">
@@ -123,11 +123,11 @@ export default function McpPack() {
         <div className="space-y-1.5">
           <div className="flex items-start gap-2">
             <code className="text-[11px] font-mono text-primary shrink-0">requireTrustedWrite()</code>
-            <span className="text-muted-foreground text-[11px]">— protect write endpoints</span>
+            <span className="text-muted-foreground text-[11px]">— tool builders protect write endpoints</span>
           </div>
           <div className="flex items-start gap-2">
             <code className="text-[11px] font-mono text-primary shrink-0">commitAwareFetch()</code>
-            <span className="text-muted-foreground text-[11px]">— auto commit mode for agents</span>
+            <span className="text-muted-foreground text-[11px]">— agents automate commit transitions</span>
           </div>
           <div className="flex items-start gap-2">
             <code className="text-[11px] font-mono text-primary shrink-0">handleCommitRequired()</code>
