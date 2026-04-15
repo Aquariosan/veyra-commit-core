@@ -12,12 +12,66 @@ Veyra is the protocol that enables the transition from Explore to Commit.
 
 ---
 
+## Quickstart: MCP Pack (Fastest Path)
+
+Connect to all 48 Veyra tools with one URL. No SDK install required.
+
+### Claude Desktop
+```json
+{
+  "mcpServers": {
+    "veyra": {
+      "url": "https://mcp.veyra.to/sse"
+    }
+  }
+}
+```
+
+### OpenAI / Codex
+```
+MCP Server URL: https://mcp.veyra.to/sse
+```
+
+### Cursor
+```
+Settings → MCP → Add Server → https://mcp.veyra.to/sse
+```
+
+### Windsurf
+```
+Settings → MCP → Add Server → https://mcp.veyra.to/sse
+```
+
+### Cline
+```
+MCP Settings → Add → https://mcp.veyra.to/sse
+```
+
+### Any MCP Client
+```
+SSE endpoint: https://mcp.veyra.to/sse
+```
+
+**What you get:**
+- 48 tools total: 24 free reads, 24 protected writes
+- 8 tool domains: memory, notes, tasks, snippets, bookmarks, contacts, forms, webhooks
+- Each domain: 3 free read tools + 3 protected write tools
+- One URL. One decision surface. One settlement rail.
+
+**Pack endpoints:**
+- SSE: https://mcp.veyra.to/sse
+- Manifest: https://mcp.veyra.to/.well-known/veyra-pack.json
+- Health: https://mcp.veyra.to/health
+- Tools list: https://mcp.veyra.to/tools
+
+---
+
 ## Protocol Flow
 
 ### Step 1: Trust Discovery (FREE)
 
 ```
-GET https://api.veyra.dev/v1/trust-status/{domain}
+GET https://api.veyra.to/v1/trust-status/{domain}
 
 Response:
 {
@@ -25,14 +79,14 @@ Response:
   "production_mode": "trusted",
   "commit_mode": true,
   "commit_mode_provider": "veyra",
-  "verify_endpoint": "https://api.veyra.dev/v1/verify-token"
+  "verify_endpoint": "https://api.veyra.to/v1/verify-token"
 }
 ```
 
 ### Step 2: Authorize Action
 
 ```
-POST https://api.veyra.dev/v1/authorize-action
+POST https://api.veyra.to/v1/authorize-action
 Headers:
   Authorization: Bearer tr_...
   Content-Type: application/json
@@ -69,7 +123,7 @@ Body: { ...your write payload }
 ### Step 4: Token Verification by Tool (FREE)
 
 ```
-POST https://api.veyra.dev/v1/verify-token
+POST https://api.veyra.to/v1/verify-token
 Body:
 {
   "token": "vt_abc123..."
@@ -89,7 +143,7 @@ Response:
 ### Step 5: Submit Receipt
 
 ```
-POST https://api.veyra.dev/v1/submit-receipt
+POST https://api.veyra.to/v1/submit-receipt
 Headers:
   Authorization: Bearer tr_...
 Body:
@@ -118,8 +172,8 @@ When a tool requires commit mode and no valid token is provided:
 {
   "error": "VeyraCommitRequired",
   "required_mode": "commit",
-  "authorize_endpoint": "https://api.veyra.dev/v1/authorize-action",
-  "verify_endpoint": "https://api.veyra.dev/v1/verify-token",
+  "authorize_endpoint": "https://api.veyra.to/v1/authorize-action",
+  "verify_endpoint": "https://api.veyra.to/v1/verify-token",
   "retry_strategy": "authorize_then_retry_with_x_veyra_token",
   "install": "npm install @veyrahq/sdk-node"
 }
@@ -154,13 +208,20 @@ import {
   authorizeAction,
   isVeyraCommitRequired,
   handleCommitRequired,
-  submitReceipt
+  submitReceipt,
+  commitAwareFetch
 } from '@veyrahq/sdk-node'
 
-// Check if a tool requires commit mode
-const status = await checkTrustStatus('salesforce.com')
+// One-call commit (recommended)
+const res = await commitAwareFetch(toolUrl, init, {
+  apiKey: 'tr_...',
+  agentId: 'agent-123',
+  actionType: 'update',
+  target: 'crm'
+})
 
-// Authorize an action
+// Or manual flow:
+const status = await checkTrustStatus('salesforce.com')
 const auth = await authorizeAction({
   apiKey: 'tr_...',
   agentId: 'agent-123',
@@ -168,15 +229,11 @@ const auth = await authorizeAction({
   target: 'crm',
   toolDomain: 'salesforce.com'
 })
-
-// Execute with token
 const res = await fetch(toolUrl, {
   method: 'POST',
   headers: { 'X-Veyra-Token': auth.token },
   body: JSON.stringify(payload)
 })
-
-// Submit receipt
 await submitReceipt({ apiKey: 'tr_...', actionId: auth.actionId, token: auth.token, result: 'success' })
 ```
 
@@ -196,6 +253,17 @@ if (await isVeyraCommitRequired(res)) {
 
 ---
 
+## Discovery Layers
+
+Veyra supports 4 discovery mechanisms (checked in priority order):
+
+1. **DNS TXT**: `_veyra.{domain}` — checked before any HTTP connection
+2. **HTTP Header**: `X-Veyra-Commit` — parsed from any HTTP response
+3. **Well-Known**: `/.well-known/veyra.json` — analogous to robots.txt
+4. **Error Recovery**: `VeyraCommitRequired` — returned by protected tools
+
+---
+
 ## MCP Server Card Integration
 
 Tools can declare Veyra support in their MCP Server Card:
@@ -205,12 +273,29 @@ Tools can declare Veyra support in their MCP Server Card:
   "security": {
     "productionMode": "trusted",
     "commitModeProvider": "veyra",
-    "verifyEndpoint": "https://api.veyra.dev/v1/verify-token"
+    "verifyEndpoint": "https://api.veyra.to/v1/verify-token"
   }
 }
 ```
 
-When an AI agent reads this card, it knows commit mode is required and Veyra is the provider.
+---
+
+## Reference Tools
+
+All 8 tools are live, public, and installable from npm:
+
+| Tool | npm | Description |
+|------|-----|-------------|
+| veyra-memory | `npm i -g veyra-memory` | Persistent key-value store |
+| veyra-notes | `npm i -g veyra-notes` | Note-taking with tags |
+| veyra-tasks | `npm i -g veyra-tasks` | Task management |
+| veyra-snippets | `npm i -g veyra-snippets` | Code snippet storage |
+| veyra-bookmarks | `npm i -g veyra-bookmarks` | Bookmark manager |
+| veyra-contacts | `npm i -g veyra-contacts` | Contact management |
+| veyra-forms | `npm i -g veyra-forms` | Form builder |
+| veyra-webhooks | `npm i -g veyra-webhooks` | Webhook sender |
+
+All tools: reads free, writes require Veyra commit mode.
 
 ---
 
@@ -223,7 +308,38 @@ When an AI agent reads this card, it knows commit mode is required and Veyra is 
 | C | High-risk writes (deploy, delete) | €0.10/action |
 | D | Cross-org writes (multi-tenant) | €0.25/action |
 
-Trust checks and verification are always free.
+Trust checks, verification, and all read tools are always free.
+
+---
+
+## All Endpoints
+
+| Endpoint | Method | Cost |
+|----------|--------|------|
+| /v1/capability | GET | Free |
+| /v1/trust-status/{domain} | GET | Free |
+| /v1/authorize-action | POST | Free |
+| /v1/verify-token | POST | Free |
+| /v1/submit-receipt | POST | Settlement |
+| /v1/settle-action | POST | Settlement |
+| /v1/public/stats | GET | Free |
+
+Base URL: https://api.veyra.to/v1
+
+---
+
+## Machine-Readable Discovery Files
+
+| File | URL |
+|------|-----|
+| llms.txt | https://veyra.to/llms.txt |
+| llms-full.txt | https://veyra.to/llms-full.txt |
+| OpenAPI | https://veyra.to/openapi.json |
+| AI Plugin | https://veyra.to/.well-known/ai-plugin.json |
+| MCP Server Card | https://veyra.to/.well-known/mcp.json |
+| Agent Manifest | https://veyra.to/.well-known/ai-manifest.json |
+| Veyra Discovery | https://veyra.to/.well-known/veyra.json |
+| MCP Pack Manifest | https://mcp.veyra.to/.well-known/veyra-pack.json |
 
 ---
 
@@ -233,4 +349,5 @@ Trust checks and verification are always free.
 2. **Commit runs through Veyra**: Every productive write is delegated, verified, and settled
 3. **Machine-readable**: All signals are structured JSON, not human instructions
 4. **Auto-recovery**: Rejected writes include retry instructions — no human needed
-5. **The agent sells it**: Tools expose commit mode, agents follow the path automatically
+5. **One URL**: MCP Pack at https://mcp.veyra.to/sse for all tools
+6. **The agent sells it**: Tools expose commit mode, agents follow the path automatically
