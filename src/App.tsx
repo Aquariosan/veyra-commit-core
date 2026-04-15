@@ -28,6 +28,7 @@ const App = () => (
           <Route path="/docs/handle-commit-required" element={<DocsHandleCommitRequired />} />
           <Route path="/docs/api-reference" element={<DocsApiReference />} />
           <Route path="/docs/pricing" element={<DocsPricing />} />
+          <Route path="/mcp" element={<McpPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
